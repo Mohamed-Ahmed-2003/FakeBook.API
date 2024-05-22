@@ -16,13 +16,13 @@ namespace FakeBook.Domain.Aggregates.UserProfileAggregate
         public string Phone { get; private set; }
         public string City { get; private set; }
 
-        public static GeneralInfo CreateBasicInfo(string FirstName, string lastName, string emailAddress,
+        public static GeneralInfo CreateBasicInfo(string firstName, string lastName, string emailAddress,
           string phone, DateTime dateOfBirth, string city)
         {
 
             return new GeneralInfo
             {
-                FirstName = FirstName,
+                FirstName = firstName,
                 LastName = lastName,
                 EmailAddress = emailAddress,
                 Phone = phone,

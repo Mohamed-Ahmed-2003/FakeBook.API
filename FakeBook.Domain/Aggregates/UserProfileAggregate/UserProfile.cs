@@ -10,7 +10,7 @@ namespace FakeBook.Domain.Aggregates.UserProfileAggregate
     {
         private UserProfile() { }
 
-        public Guid UserProfileId { get; set; }
+        public Guid UserProfileId { get; private set; }
         public string IdentityId { get; private set; }
         public GeneralInfo GeneralInfo { get; private set; }
         public DateTime DateCreated { get; private set; }

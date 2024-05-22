@@ -6,4 +6,21 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Post\CommandHandlers\" />
+    <Folder Include="Post\Commands\" />
+    <Folder Include="Post\Queries\" />
+    <Folder Include="Post\QueryHandlers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fakebook.DAL\Fakebook.DAL.csproj" />
+    <ProjectReference Include="..\FakeBook.Domain\FakeBook.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

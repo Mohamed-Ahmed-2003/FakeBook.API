@@ -5,17 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace FakeBook.API.Controllers.V1
 {
     [ApiVersion("1.0")]
-    [Route("Api/v{version:apiVersion}/[controller]")]
+    [Route(ApiRoutes.BaseRoute)]
     [ApiController]
     public class PostsController : ControllerBase
     {
         [HttpGet]
-        [Route("{id}")]
+        [Route(ApiRoutes.Post.RouteId)]
         public IActionResult GetById(int id)
         {
-          
-
-            return Ok();
+                return Ok();
         }
     }
 }
