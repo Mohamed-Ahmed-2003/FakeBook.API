@@ -1,9 +1,10 @@
-﻿using FakeBook.Domain.Aggregates.UserProfileAggregate;
+﻿using Fakebook.Application.Generics;
+using FakeBook.Domain.Aggregates.UserProfileAggregate;
 using MediatR;
 
 namespace Fakebook.Application.Profile.Commands
 {
-    public class PostUserProfileCmd : IRequest<UserProfile>
+    public class PostUserProfileCmd : IRequest<Response<UserProfile>>
     {
         public Guid UserProfileId { get;  set; }
         public string FirstName { get;  set; }

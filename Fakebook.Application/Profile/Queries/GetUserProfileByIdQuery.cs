@@ -1,4 +1,5 @@
-﻿using FakeBook.Domain.Aggregates.UserProfileAggregate;
+﻿using Fakebook.Application.Generics;
+using FakeBook.Domain.Aggregates.UserProfileAggregate;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Fakebook.Application.Profile.Queries
 {
-    public class GetUserProfileByIdQuery(Guid id) : IRequest<UserProfile>
+    public class GetUserProfileByIdQuery(Guid id) : IRequest<Response<UserProfile>>
     {
         public Guid UserId { get; set; } = id;
     }

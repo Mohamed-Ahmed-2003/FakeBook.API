@@ -1,30 +1,34 @@
-﻿using Fakebook.Application.Profile.Commands;
+﻿using Fakebook.Application.Generics;
+using Fakebook.Application.Profile.Commands;
 using Fakebook.DAL;
 using FakeBook.Domain.Aggregates.UserProfileAggregate;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Fakebook.Application.Profile.CommandHandlers
 {
-    public class DeleteUserProfileCmdHandler(DataContext context) : IRequestHandler<DeleteUserProfileCmd>
+    public class DeleteUserProfileCmdHandler(DataContext context) : IRequestHandler<DeleteUserProfileCmd,Response<UserProfile>>
     {
         private readonly DataContext _context = context;
 
-        public async Task Handle(DeleteUserProfileCmd request, CancellationToken cancellationToken)
+        public async Task<Response<UserProfile>> Handle(DeleteUserProfileCmd request, CancellationToken cancellationToken)
         {
+            var response = new Response<UserProfile>();
+
             var userProfile = await _context.Set<UserProfile>().FindAsync(request.UserProfileId, cancellationToken);
 
-            if (userProfile != null)
+            if (userProfile is null)
             {
-            _context.Set<UserProfile>().Remove(userProfile);
-            await _context.SaveChangesAsync(cancellationToken);
+                response.Success = false;
+                response.Errors.Add(new ErrorResult { Status = Generics.Enums.StatusCode.NotFound, Message = "User Profile is not exist" });
+            }
+            else
+            {
+                _context.Set<UserProfile>().Remove(userProfile);
+                await _context.SaveChangesAsync(cancellationToken);
             }
 
-            return; 
+            return response; 
         }
     }
 
