@@ -1,4 +1,4 @@
-# FakeBook API - README
+# FakeBook API (In Progress)
 
 Welcome to the FakeBook API, a social networking API built using .NET 8. This project follows the principles of Clean Architecture and utilizes various modern technologies such as Entity Framework Core, SQL, and SignalR for real-time messaging.
 
