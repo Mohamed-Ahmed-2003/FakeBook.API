@@ -16,7 +16,7 @@ namespace FakeBook.API.Controllers.V1
     [ApiVersion("1.0")]
     [Route(ApiRoutes.BaseRoute)]
     [ApiController]
-    public class UserProfilesController(IMapper mapper,IMediator mediator) : ControllerBase
+    public class UserProfilesController(IMapper mapper,IMediator mediator) : BaseController
     {
         private readonly IMapper _mapper = mapper;
         private readonly IMediator _mediator = mediator;
@@ -56,17 +56,7 @@ namespace FakeBook.API.Controllers.V1
             return Ok(profile);
         }
 
-        protected IActionResult HandleErrorResponse(List<ErrorResult> errors)
-        {
-            var errRes = new ErrorResponse
-            {
-                StatusCode = (int)errors[0].Status,
-                Errors = errors.Select(res => res.Message).ToList(),
-                StatusName = errors[0].Status.ToString(),
-                Timestamp = DateTime.Now
-            };
-            return NotFound(errRes);
-        }
+      
 
         [HttpPatch]
         [ValidateModel]

@@ -9,5 +9,10 @@ namespace Fakebook.Application.Generics
         public bool Success { get; set; } = true;
         public List<ErrorResult> Errors { get; set; } = new List<ErrorResult>();
         public T? Payload {  get; set; } 
+
+        public void AddError (StatusCode statusCode , string mesg)
+        {
+            Errors.Add (new ErrorResult { Status = statusCode , Message = mesg });
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using FakeBook.API.Contracts.Others;
+﻿using Fakebook.Application.Generics.Enums;
+using FakeBook.API.Contracts.Others;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -11,7 +12,7 @@ namespace FakeBook.API.Filters
          
                 var apiError = new ErrorResponse
                 {
-                    StatusCode = 500,
+                    StatusCode = (int) StatusCode.ServerError,
                     StatusName = "Internal Server Error",
                     Timestamp = DateTime.UtcNow,
                  
