@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FakeBook.Domain.Constants;
+using FakeBook.Domain.ValidationExceptions;
+using FakeBook.Domain.Validators.ProfileValidators;
+
 
 namespace FakeBook.Domain.Aggregates.UserProfileAggregate
 {
@@ -17,10 +16,9 @@ namespace FakeBook.Domain.Aggregates.UserProfileAggregate
         public string City { get; private set; }
 
         public static GeneralInfo CreateBasicInfo(string firstName, string lastName, string emailAddress,
-          string phone, DateTime dateOfBirth, string city)
+      string phone, DateTime dateOfBirth, string city)
         {
-
-            return new GeneralInfo
+            var info = new GeneralInfo
             {
                 FirstName = firstName,
                 LastName = lastName,
@@ -29,6 +27,21 @@ namespace FakeBook.Domain.Aggregates.UserProfileAggregate
                 DateOfBirth = dateOfBirth,
                 City = city
             };
+
+            var validator = new GeneralInfoValidator();
+            var validationResult = validator.Validate(info);
+
+            if (!validationResult.IsValid)
+            {
+                var ex = new ProfileNotValidException(Helper.ExceptionsMessages.ProfileNotValidException);
+                foreach (var error in validationResult.Errors)
+                {
+                    ex.ValidationErrors.Add(error.ErrorMessage);
+                }
+                throw ex;
+            }
+
+            return info;
         }
     }
 }

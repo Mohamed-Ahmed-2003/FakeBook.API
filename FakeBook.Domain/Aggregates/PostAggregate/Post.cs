@@ -1,9 +1,8 @@
 ﻿using FakeBook.Domain.Aggregates.UserProfileAggregate;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FakeBook.Domain.Constants;
+using FakeBook.Domain.ValidationExceptions;
+using FakeBook.Domain.Validators.PostValidators;
+
 
 namespace FakeBook.Domain.Aggregates.PostAggregate
 {
@@ -32,7 +31,8 @@ namespace FakeBook.Domain.Aggregates.PostAggregate
         #region FM
         public static Post CreatePost(Guid userProfileId,string text)
         {
-            return new Post
+            var validator = new PostValidator ();
+            var post = new Post
             { 
                 UserProfileId = userProfileId,
                 Text = text,
@@ -40,12 +40,29 @@ namespace FakeBook.Domain.Aggregates.PostAggregate
                 LastModifiedDate = DateTime.UtcNow,
             };
 
+            var res = validator.Validate(post);
+            if (!res.IsValid)
+            {
+                var ex = new PostNotValidException (Helper.ExceptionsMessages.PostNotValidException);
+                foreach (var error in res.Errors)
+                {
+                    ex.ValidationErrors.Add(error.ErrorMessage);
+                }
+                throw ex;
+            }
+            return post;
         }
         #endregion
 
 
         public void UpdatePostText(string newText)
         {
+            if (string.IsNullOrEmpty(newText))
+            {
+                var ex = new PostNotValidException(Helper.ExceptionsMessages.PostTextNotValidException);
+                ex.ValidationErrors.Add("Please provide a valid text");
+                throw ex;
+            }
             Text = newText;
             LastModifiedDate = DateTime.UtcNow;
         }

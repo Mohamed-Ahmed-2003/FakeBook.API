@@ -2,7 +2,7 @@
 {
     public class ApiRoutes
     {
-        public const string BaseRoute= "Api/v{version:apiVersion}/[controller]";
+        public const string BaseRoute = "Api/v{version:apiVersion}/[controller]";
 
         public class UserProfile
         {

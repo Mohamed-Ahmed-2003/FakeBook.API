@@ -1,5 +1,6 @@
 ﻿
 using Asp.Versioning;
+using FakeBook.API.Filters;
 
 namespace FakeBook.API.Registrars
 {
@@ -8,7 +9,10 @@ namespace FakeBook.API.Registrars
         public void RegisterServices(WebApplicationBuilder builder)
         {
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(config =>
+            {
+                config.Filters.Add(typeof(ExceptionHandler));
+            });
 
             builder.Services.AddApiVersioning(conf =>
             {

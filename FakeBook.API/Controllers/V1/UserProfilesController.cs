@@ -6,9 +6,9 @@ using Fakebook.Application.Profile.Queries;
 using FakeBook.API.Contracts.Others;
 using FakeBook.API.Contracts.UserProfile.Requests;
 using FakeBook.API.Contracts.UserProfile.Responses;
+using FakeBook.API.Filters;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FakeBook.API.Controllers.V1
 {
@@ -30,6 +30,7 @@ namespace FakeBook.API.Controllers.V1
             return Ok(res);
         }
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> CreateProfile([FromBody] UserProfileCreateUpdate userProfileCreate)
         {
             var cmd = _mapper.Map<PostUserProfileCmd>(userProfileCreate);
@@ -68,6 +69,8 @@ namespace FakeBook.API.Controllers.V1
         }
 
         [HttpPatch]
+        [ValidateModel]
+
         [Route(ApiRoutes.UserProfile.RouteId)]
         public async Task<IActionResult> UpdateUserProfile(string id, UserProfileCreateUpdate userProfile)
         {

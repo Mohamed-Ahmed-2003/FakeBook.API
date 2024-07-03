@@ -1,4 +1,7 @@
 ﻿using FakeBook.Domain.Aggregates.UserProfileAggregate;
+using FakeBook.Domain.Constants;
+using FakeBook.Domain.ValidationExceptions;
+using FakeBook.Domain.Validators.PostValidators;
 
 namespace FakeBook.Domain.Aggregates.PostAggregate
 {
@@ -17,7 +20,9 @@ namespace FakeBook.Domain.Aggregates.PostAggregate
 
         public static PostComment CreatePostComment (Guid userProfileId , Guid post , string commentText)
         {
-            return new PostComment
+            var validator = new PostCommentValidator();
+
+            var comment = new PostComment()
             {
                 UserProfileId = userProfileId,
                 PostId = post,
@@ -25,6 +30,17 @@ namespace FakeBook.Domain.Aggregates.PostAggregate
                 CreatedDate = DateTime.UtcNow,
                 LastModifiedDate = DateTime.UtcNow,
             };
+            var res = validator.Validate(comment);
+            if (!res.IsValid)
+            {
+                var ex = new PostCommentNotValidException(Helper.ExceptionsMessages.PostCommentNotValidException);
+                foreach (var error in res.Errors)
+                {
+                    ex.ValidationErrors.Add(error.ErrorMessage);
+                }
+                throw ex;
+            }
+            return comment;
         }
 
 
