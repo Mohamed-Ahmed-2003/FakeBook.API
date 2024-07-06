@@ -1,6 +1,6 @@
 ﻿namespace FakeBook.API.Contracts.Posts.Responses
 {
-    public class AbstractPostResponse
+    public class AbstractPost
     {
         public Guid PostId { get;  set; }
         public Guid UserProfileId { get;  set; }

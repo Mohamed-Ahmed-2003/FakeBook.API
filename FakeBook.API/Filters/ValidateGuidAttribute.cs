@@ -5,23 +5,34 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace FakeBook.API.Filters
 {
-    public class ValidateGuidAttribute (string key) : ActionFilterAttribute
+    public class ValidateGuidAttribute (params string [] keys) : ActionFilterAttribute
     {
-        private readonly string _key = key;
+        private readonly List<string> _keys = new List<string>(keys);
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (!context.ActionArguments.TryGetValue(_key, out var value)) return;
+            var errors = new List<string>();
 
-            if (Guid.TryParse(value?.ToString(),out var guid)) return;
-            var apiError = new ErrorResponse
+            foreach (var key in _keys)
             {
-                StatusCode = (int)StatusCode.NotFound,
-                StatusName = "Bad Request",
-                Timestamp = DateTime.UtcNow
-            };
-            apiError.Errors.Add($"This value ' {value} ' is invalid Guid format");
-            context.Result = new JsonResult(apiError) { StatusCode = (int)StatusCode.NotFound};
+                if (!context.ActionArguments.TryGetValue(key, out var value) || !Guid.TryParse(value?.ToString(), out _))
+                {
+                    errors.Add($"The value for '{key}' is not a valid GUID format.");
+                }
+            }
+
+            if (errors.Count > 0)
+            {
+                var apiError = new ErrorResponse
+                {
+                    StatusCode = (int)StatusCode.NotFound,
+                    StatusName = "Bad Request",
+                    Timestamp = DateTime.UtcNow,
+                    Errors = errors
+                };
+
+                context.Result = new JsonResult(apiError) { StatusCode = (int)StatusCode.NotFound };
+            }
         }
     }
 }

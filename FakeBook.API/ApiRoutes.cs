@@ -12,6 +12,12 @@
         public class Post
         {
             public const string RouteId = "{id}";
+
+            public class Comments
+            {
+                public const string All = "{postId}/comments";
+                public const string Single = All + "{commentId}";
+            }
         }
 
     }

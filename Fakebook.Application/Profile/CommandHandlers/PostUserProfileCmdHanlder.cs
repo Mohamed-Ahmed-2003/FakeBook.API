@@ -57,10 +57,10 @@ namespace Fakebook.Application.Profile.CommandHandlers
             } catch (ProfileNotValidException ex)
             {
                 response.Success = false;
-                ex.ValidationErrors.ForEach(e =>
+                ex.ValidationErrors.ForEach(error =>
                 {
                     response.Errors
-                    .Add(new ErrorResult { Status = Generics.Enums.StatusCode.ValidationError, Message = ex.Message });
+                    .Add(new ErrorResult { Status = Generics.Enums.StatusCode.ValidationError, Message = error });
 
                 });
 

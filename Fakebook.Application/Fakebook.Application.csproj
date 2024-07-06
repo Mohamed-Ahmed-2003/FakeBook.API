@@ -12,11 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Posts\CommandHandlers\" />
-    <Folder Include="Posts\Commands\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Fakebook.DAL\Fakebook.DAL.csproj" />
     <ProjectReference Include="..\FakeBook.Domain\FakeBook.Domain.csproj" />
   </ItemGroup>

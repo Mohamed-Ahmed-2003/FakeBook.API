@@ -2,6 +2,7 @@
 using FakeBook.Domain.Constants;
 using FakeBook.Domain.ValidationExceptions;
 using FakeBook.Domain.Validators.PostValidators;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FakeBook.Domain.Aggregates.PostAggregate
 {
@@ -18,7 +19,7 @@ namespace FakeBook.Domain.Aggregates.PostAggregate
         public UserProfile UserProfile { get; private set; }
         public Post Post { get; private set; }
 
-        public static PostComment CreatePostComment (Guid userProfileId , Guid post , string commentText)
+        public static PostComment CreatePostComment (Guid userProfileId  , string commentText, Guid post)
         {
             var validator = new PostCommentValidator();
 
@@ -43,6 +44,10 @@ namespace FakeBook.Domain.Aggregates.PostAggregate
             return comment;
         }
 
-
+        public void UpdateCommentText(string newText)
+        {
+            CommentText = newText;
+            LastModifiedDate = DateTime.UtcNow;
+        }
     }
 }

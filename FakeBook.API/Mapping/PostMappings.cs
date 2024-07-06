@@ -8,8 +8,10 @@ namespace FakeBook.API.Mapping
     {
        public PostMappings ()
         {
-            CreateMap<Post, AbstractPostResponse>();
-
+            CreateMap<Post, AbstractPost>();
+            CreateMap<PostComment, AbstractPostComment>();
         }
+
+
     }
 }
