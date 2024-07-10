@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FakeBook.API.Registrars
 {
-    public class IdentityRegistrar : IWebAppBuilderRegistrar
+    public class JwtRegistrar : IWebAppBuilderRegistrar
     {
         public void RegisterServices(WebApplicationBuilder builder)
         {

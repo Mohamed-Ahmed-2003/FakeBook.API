@@ -19,6 +19,11 @@
                 public const string Single = All + "{commentId}";
             }
         }
+        public class Identity
+        {
+            public const string Login = "login";
+            public const string Register = "register";
+        }
 
     }
 }

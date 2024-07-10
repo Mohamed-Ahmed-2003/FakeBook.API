@@ -14,6 +14,7 @@ namespace Fakebook.Application.Posts
         public const string PostInteractionNotFound = "Interaction not found.";
         public const string InteractionRemovalNotAuthorized = "Only the interaction author can remove it.";
         public const string PostCommentNotFound = "Comment not found.";
+        public const string CommentUpdateNotAuthorized = "Only the comment author can update it.";
         public const string CommentRemovalNotAuthorized = "Only the comment author can remove it.";
     }
 

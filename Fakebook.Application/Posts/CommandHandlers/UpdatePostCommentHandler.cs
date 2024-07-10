@@ -36,11 +36,11 @@ public class UpdatePostCommentHandler(DataContext ctx) : IRequestHandler<UpdateP
                 return result;
             }
 
-            //if (comment.UserProfileId != request.UserProfileId)
-            //{
-            //    result.AddError(StatusCode.CommentRemovalNotAuthorized, PostsErrorMessages.CommentRemovalNotAuthorized);
-            //    return result;
-            //}
+            if (comment.UserProfileId != request.UserProfileId)
+            {
+                result.AddError(StatusCode.CommentUpdateNotAuthorized, PostsErrorMessages.CommentUpdateNotAuthorized);
+                return result;
+            }
 
             comment.UpdateCommentText(request.UpdatedText);
             _ctx.Posts.Update(post);

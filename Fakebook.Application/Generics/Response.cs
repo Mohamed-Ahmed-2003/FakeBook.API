@@ -12,6 +12,7 @@ namespace Fakebook.Application.Generics
 
         public void AddError (StatusCode statusCode , string mesg)
         {
+            Success = false;
             Errors.Add (new ErrorResult { Status = statusCode , Message = mesg });
         }
     }

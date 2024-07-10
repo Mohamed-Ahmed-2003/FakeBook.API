@@ -8,6 +8,7 @@ using FakeBook.API.Contracts.UserProfile.Requests;
 using FakeBook.API.Contracts.UserProfile.Responses;
 using FakeBook.API.Filters;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FakeBook.API.Controllers.V1
@@ -15,6 +16,7 @@ namespace FakeBook.API.Controllers.V1
 
     [ApiVersion("1.0")]
     [Route(ApiRoutes.BaseRoute)]
+    [Authorize]
     [ApiController]
     public class UserProfilesController(IMapper mapper,IMediator mediator) : BaseController
     {
@@ -29,16 +31,16 @@ namespace FakeBook.API.Controllers.V1
             var res =  _mapper.Map<List<UserProfileResponse>>(userProfiles.Payload);
             return Ok(res);
         }
-        [HttpPost]
-        [ValidateModel]
-        public async Task<IActionResult> CreateProfile([FromBody] UserProfileCreateUpdate userProfileCreate)
-        {
-            var cmd = _mapper.Map<PostUserProfileCmd>(userProfileCreate);
-            var userProfile = await _mediator.Send(cmd);
-            var res =  _mapper.Map<UserProfileResponse>(userProfile);
+        //[HttpPost]
+        //[ValidateModel]
+        //public async Task<IActionResult> CreateProfile([FromBody] UserProfileCreateUpdate userProfileCreate)
+        //{
+        //    var cmd = _mapper.Map<PostUserProfileCmd>(userProfileCreate);
+        //    var userProfile = await _mediator.Send(cmd);
+        //    var res =  _mapper.Map<UserProfileResponse>(userProfile);
 
-            return CreatedAtAction(nameof(GetUserProfileById), new { id = res.UserProfileId }, res);
-         }
+        //    return CreatedAtAction(nameof(GetUserProfileById), new { id = res.UserProfileId }, res);
+        // }
 
         [HttpGet]
         [Route(ApiRoutes.UserProfile.RouteId)]

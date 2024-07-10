@@ -4,6 +4,7 @@ using Fakebook.Application.Posts.Commands;
 using Fakebook.Application.Posts.Queries;
 using FakeBook.API.Contracts.Posts.Requests;
 using FakeBook.API.Contracts.Posts.Responses;
+using FakeBook.API.Extensions;
 using FakeBook.API.Filters;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -49,10 +50,12 @@ namespace FakeBook.API.Controllers.V1
         [ValidateModel]
         public async Task<IActionResult> CreatePost ([FromBody] PostCreate postCreate)
         {
+            var userProfileId = HttpContext.GetUserProfileId();
+
             var cmd = new CreatePostCmd
             {
                 Text = postCreate.Text,
-                UserProfileId = postCreate.UserProfileId
+                UserProfileId = userProfileId
             };
 
             var cmdRes = await _mediator.Send(cmd);
@@ -72,11 +75,13 @@ namespace FakeBook.API.Controllers.V1
         [ValidateModel]
         public async Task<IActionResult> UpdatePost([FromBody] PostUpdate updatedPost, string id)
         {
+            var userProfileId = HttpContext.GetUserProfileId();
 
             var command = new UpdatePostCmd()
             {
                 NewText = updatedPost.Text,
                 PostId = Guid.Parse(id),
+                UserProfileId = userProfileId
             };
             var result = await _mediator.Send(command);
 
@@ -114,10 +119,11 @@ namespace FakeBook.API.Controllers.V1
         [ValidateModel]
         public async Task<IActionResult> AddPostComment(string postId, [FromBody] PostCommentCreate comment)
         {
-            //var userProfileId = HttpContext.GetUserProfileIdClaimValue();
+            var userProfileId = HttpContext.GetUserProfileId();
 
             var command = new AddPostCommentCmd()
             {
+                UserProfileId = userProfileId,
                 PostId = Guid.Parse(postId),
                 CommentText = comment.Text
             };

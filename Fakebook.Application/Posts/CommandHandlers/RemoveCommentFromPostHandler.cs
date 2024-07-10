@@ -41,11 +41,11 @@ public class RemoveCommentFromPostHandler : IRequestHandler<RemovePostCommentCmd
                 return result;
             }
 
-            //if (comment.UserProfileId != request.UserProfileId)
-            //{
-            //    result.AddError(StatusCode.CommentRemovalNotAuthorized, PostsErrorMessages.CommentRemovalNotAuthorized);
-            //    return result;
-            //}
+            if (comment.UserProfileId != request.UserProfileId)
+            {
+                result.AddError(StatusCode.CommentRemovalNotAuthorized, PostsErrorMessages.CommentRemovalNotAuthorized);
+                return result;
+            }
 
             post.RemoveComment(comment);
             _ctx.Posts.Update(post);

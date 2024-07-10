@@ -7,6 +7,7 @@ namespace Fakebook.Application.Options
         public string Key { get; set; }
         public string Issuer { get; set; }
         public string[] Audiences { get; set; }
+        public int ExpirationMinutes {  get; set; }
     }
 
 }

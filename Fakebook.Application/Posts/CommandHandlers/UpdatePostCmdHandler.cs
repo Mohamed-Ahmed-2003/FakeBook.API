@@ -33,12 +33,12 @@ public class UpdatePostCmdHandler : IRequestHandler<UpdatePostCmd, Response<Post
                 return result;
             }
 
-            //if (post.UserProfileId != request.UserProfileId)
-            //{
-            //    result.AddError(StatusCode.NotFound, PostsErrorMessages.PostUpdateNotPossible);
-            //    return result;
-            //}
-            
+            if (post.UserProfileId != request.UserProfileId)
+            {
+                result.AddError(StatusCode.PostUpdateNotAuthorized, PostsErrorMessages.PostUpdateNotPossible);
+                return result;
+            }
+
             post.UpdatePostText(request.NewText);
 
             await _ctx.SaveChangesAsync(cancellationToken);

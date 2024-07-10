@@ -32,11 +32,11 @@ public class DeletePostCmdHandler : IRequestHandler<DeletePostCmd, Response<Post
                 return result;
             }
 
-            //if (post.UserProfileId != request.UserProfileId)
-            //{
-            //    result.AddError(StatusCode.NotFound /*PostDeleteNotPossible*/, PostsErrorMessages.PostDeleteNotPossible);
-            //    return result;
-            //}
+            if (post.UserProfileId != request.UserProfileId)
+            {
+                result.AddError(StatusCode.PostRemovalNotAuthorized , PostsErrorMessages.PostDeleteNotPossible);
+                return result;
+            }
 
             _ctx.Posts.Remove(post);
             await _ctx.SaveChangesAsync(cancellationToken);

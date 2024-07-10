@@ -1,7 +1,6 @@
 ﻿
 using Fakebook.Application.Profile.Queries;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+
 
 namespace FakeBook.API.Registrars
 {

@@ -3,9 +3,21 @@
     public enum StatusCode
     {
         NotFound = 404 ,
-        ValidationError = 444,
         Succeed = 200,
         ServerError = 500,
-        Unknown = 999
+
+        ValidationError = 444,
+
+        UserAlreadyExists  = 220,
+        UserCreationFailed = 221,
+        UserNotFound= 222,
+        ProfileNotFound = 223,
+
+        PostUpdateNotAuthorized  = 601,
+        PostRemovalNotAuthorized = 602 , 
+        CommentUpdateNotAuthorized = 603 ,
+        CommentRemovalNotAuthorized = 604 ,
+
+        Unknown = 999,
     }
 }

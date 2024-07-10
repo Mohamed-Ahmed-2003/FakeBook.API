@@ -1,5 +1,6 @@
 ﻿
 using Asp.Versioning;
+using Fakebook.Application.Services;
 using FakeBook.API.Filters;
 
 namespace FakeBook.API.Registrars
@@ -25,7 +26,7 @@ namespace FakeBook.API.Registrars
                 conf.GroupNameFormat = "'v'VVV";
                 conf.SubstituteApiVersionInUrl = true;
             });
-
+            builder.Services.AddScoped<JwtService>();
 
             builder.Services.AddEndpointsApiExplorer();
         }
