@@ -4,7 +4,6 @@ using Fakebook.Application.Generics;
 using Fakebook.Application.Profile.Commands;
 using Fakebook.Application.Profile.Queries;
 using FakeBook.API.Contracts.Others;
-using FakeBook.API.Contracts.UserProfile.Requests;
 using FakeBook.API.Contracts.UserProfile.Responses;
 using FakeBook.API.Filters;
 using MediatR;
@@ -60,35 +59,27 @@ namespace FakeBook.API.Controllers.V1
 
       
 
-        [HttpPatch]
-        [ValidateModel]
+        //[HttpPatch]
+        //[ValidateModel]
 
-        [Route(ApiRoutes.UserProfile.RouteId)]
-        public async Task<IActionResult> UpdateUserProfile(string id, UserProfileCreateUpdate userProfile)
-        {
+        //[Route(ApiRoutes.UserProfile.RouteId)]
+        //public async Task<IActionResult> UpdateUserProfile(string id, UserProfileCreateUpdate userProfile)
+        //{
             
 
-            var cmd = _mapper.Map<PostUserProfileCmd>(userProfile);
-            cmd.UserProfileId = Guid.Parse(id);
+        //    var cmd = _mapper.Map<PostUserProfileCmd>(userProfile);
+        //    cmd.UserProfileId = Guid.Parse(id);
 
-            var res = await _mediator.Send(cmd);
+        //    var res = await _mediator.Send(cmd);
 
-            if (!res.Success)
-                return HandleErrorResponse(res.Errors);
+        //    if (!res.Success)
+        //        return HandleErrorResponse(res.Errors);
 
-            var profile = _mapper.Map<UserProfileResponse>(res.Payload);
-            return Ok(profile);
-        }
+        //    var profile = _mapper.Map<UserProfileResponse>(res.Payload);
+        //    return Ok(profile);
+        //}
 
-        [HttpDelete]
-        [Route(ApiRoutes.UserProfile.RouteId)]
-        public async Task<IActionResult> DeleteUserProfile(string id)
-        {
-            var cmd = new DeleteUserProfileCmd(Guid.Parse(id));
-            var res = await _mediator.Send(cmd);
 
-            return !res.Success?HandleErrorResponse(res.Errors) :NoContent();
-        }
 
     }
 }

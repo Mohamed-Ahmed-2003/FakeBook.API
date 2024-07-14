@@ -1,9 +1,13 @@
-﻿using FakeBook.Domain.Aggregates.UserProfileAggregate;
+﻿
+
+using Fakebook.Application.Generics;
+using FakeBook.Domain.Aggregates.UserProfileAggregate;
+using MediatR;
 using System.ComponentModel.DataAnnotations;
 
-namespace FakeBook.API.Contracts.UserProfile.Requests
+namespace Fakebook.Application.Account.Commands
 {
-    public class UserProfileCreateUpdate
+    public class UpdateUserCmd : IRequest<Response<UserProfile>>
     {
         [Length(4, 25)]
         [Required]
@@ -20,6 +24,5 @@ namespace FakeBook.API.Contracts.UserProfile.Requests
         [Phone]
         public string? Phone { get; set; }
         public string? City { get; set; }
-
     }
 }

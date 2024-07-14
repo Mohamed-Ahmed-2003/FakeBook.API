@@ -1,9 +1,8 @@
 ﻿using Fakebook.Application.Generics;
 using MediatR;
-using System.ComponentModel.DataAnnotations;
 
 
-namespace Fakebook.Application.Identity.Commands
+namespace Fakebook.Application.Account.Commands
 {
     public class UserLoginCmd : IRequest<Response<string>>
     {

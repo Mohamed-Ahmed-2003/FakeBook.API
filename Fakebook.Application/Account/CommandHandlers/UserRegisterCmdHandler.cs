@@ -1,6 +1,6 @@
-﻿using Fakebook.Application.Generics;
+﻿using Fakebook.Application.Account.Commands;
+using Fakebook.Application.Generics;
 using Fakebook.Application.Generics.Enums;
-using Fakebook.Application.Identity.Commands;
 using Fakebook.Application.Services;
 using Fakebook.DAL;
 using FakeBook.Domain.Aggregates.UserProfileAggregate;
@@ -9,9 +9,9 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 
-namespace Fakebook.Application.Identity.CommandHandlers
+namespace Fakebook.Application.Account.CommandHandlers
 {
-    public class UserRegisterCmdHandler(DataContext context , UserManager<IdentityUser> userManager , JwtService jwtService) : IRequestHandler<UserRegisterCmd, Response<string>>
+    public class UserRegisterCmdHandler(DataContext context, UserManager<IdentityUser> userManager, JwtService jwtService) : IRequestHandler<UserRegisterCmd, Response<string>>
     {
         private readonly DataContext _context = context;
         private readonly UserManager<IdentityUser> _userManager = userManager;
@@ -25,12 +25,12 @@ namespace Fakebook.Application.Identity.CommandHandlers
             {
                 // create Identity User
 
-                var usedBefore =await _userManager.FindByEmailAsync(request.Username) != null;
+                var usedBefore = await _userManager.FindByEmailAsync(request.Username) != null;
 
                 if (usedBefore)
                 {
                     result.Success = false;
-                    result.AddError(StatusCode.UserAlreadyExists, "Username / E-mail already taken.");
+                    result.AddError(StatusCode.UserAlreadyExists, AccountErrorMessages.UserNameTaken);
                     return result;
                 }
 
@@ -42,22 +42,22 @@ namespace Fakebook.Application.Identity.CommandHandlers
                 };
                 using var transaction = await _context.Database.BeginTransactionAsync();
 
-                    var res = await _userManager.CreateAsync(user, request.Password);
-                    // create User Profile 
-                    if (!res.Succeeded)
-                    {
+                var res = await _userManager.CreateAsync(user, request.Password);
+                // create User Profile 
+                if (!res.Succeeded)
+                {
                     await transaction.RollbackAsync();
-                        result.Success = false;
-                        foreach (var err in res.Errors)
-                        {
-                            result.AddError(StatusCode.UserCreationFailed, err.Description);
-                        }
-                        return result;
+                    result.Success = false;
+                    foreach (var err in res.Errors)
+                    {
+                        result.AddError(StatusCode.UserCreationFailed, err.Description);
                     }
-                    var userInfo = GeneralInfo.CreateBasicInfo(request.FirstName, request.LastName, request.Username
-                        , request.Phone, request.DateOfBirth, request.City);
+                    return result;
+                }
+                var userInfo = GeneralInfo.CreateBasicInfo(request.FirstName, request.LastName, request.Username
+                    , request.Phone, request.DateOfBirth, request.City);
 
-                    var profile = UserProfile.CreateUserProfile(user.Id, userInfo);
+                var profile = UserProfile.CreateUserProfile(user.Id, userInfo);
                 try
                 {
                     await _context.Set<UserProfile>().AddAsync(profile);
@@ -72,8 +72,8 @@ namespace Fakebook.Application.Identity.CommandHandlers
                 }
 
                 // Generate the token
-          
-                result.Payload = _jwtService.GenerateJwtToken(user,profile.UserProfileId);
+
+                result.Payload = _jwtService.GenerateJwtToken(user, profile.UserProfileId);
             }
             catch (ProfileNotValidException ex)
             {

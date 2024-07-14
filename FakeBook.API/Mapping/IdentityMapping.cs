@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Fakebook.Application.Identity.Commands;
+using Fakebook.Application.Account.Commands;
 using FakeBook.API.Contracts.Identity.Requests;
 
 namespace FakeBook.API.Mapping
