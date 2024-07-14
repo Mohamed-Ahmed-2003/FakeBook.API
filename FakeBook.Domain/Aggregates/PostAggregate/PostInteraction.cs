@@ -1,9 +1,5 @@
 ﻿using FakeBook.Domain.Aggregates.UserProfileAggregate;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace FakeBook.Domain.Aggregates.PostAggregate
 {

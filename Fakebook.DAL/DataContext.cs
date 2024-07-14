@@ -19,7 +19,7 @@ namespace Fakebook.DAL
             base.OnModelCreating(builder);
         }
 
-        public DbSet<UserProfile> userProfiles { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Post> Posts{ get; set; }
         
     }

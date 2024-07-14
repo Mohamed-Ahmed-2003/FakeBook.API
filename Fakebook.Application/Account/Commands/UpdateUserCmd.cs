@@ -1,6 +1,4 @@
-﻿
-
-using Fakebook.Application.Generics;
+﻿using Fakebook.Application.Generics;
 using FakeBook.Domain.Aggregates.UserProfileAggregate;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +7,7 @@ namespace Fakebook.Application.Account.Commands
 {
     public class UpdateUserCmd : IRequest<Response<UserProfile>>
     {
+        public required string  UserProfileId { get;  set; }
         [Length(4, 25)]
         [Required]
         public required string FirstName { get; set; }

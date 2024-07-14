@@ -10,8 +10,9 @@ namespace FakeBook.API.Mapping
         {
             CreateMap<Post, AbstractPost>();
             CreateMap<PostComment, AbstractPostComment>();
+            CreateMap<PostInteraction, AbstractPostInteraction>()
+                .ForMember(dest => dest.Type, par => par.MapFrom(src => src.Reaction.ToString()))
+                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.UserProfile));
         }
-
-
     }
 }

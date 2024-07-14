@@ -18,6 +18,11 @@
                 public const string All = "{postId}/comments";
                 public const string Single = All + "{commentId}";
             }
+            public class Interactions
+            {
+                public const string All = "{postId}/interactions";
+                public const string Single = All + "{interactionId}";
+            }
         }
         public class Identity
         {

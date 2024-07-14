@@ -5,6 +5,7 @@ using Fakebook.DAL;
 using FakeBook.Domain.Aggregates.UserProfileAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System;
 
 
 namespace Fakebook.Application.Account.CommandHandlers
@@ -22,18 +23,18 @@ namespace Fakebook.Application.Account.CommandHandlers
             var userProfile = await _context.UserProfiles.FindAsync(request.UserProfileId);
             var user = userProfile != null ? await _userManager.FindByIdAsync(userProfile.IdentityId) : null;
 
-            if (userProfile == null || user == null)
+            if (userProfile is null || user is null)
             {
                 result.AddError(Generics.Enums.StatusCode.NotFound, string.Format(AccountErrorMessages.AccountNotFound, request.UserProfileId));
                 return result;
             }
 
-            // Update UserProfile
-            _mapper.Map(request.UserProfileUpdateDto, userProfile);
 
-            // Optionally, update IdentityUser details here if necessary
-            user.Email = request.UserProfileUpdateDto.Email;
-            user.UserName = request.UserProfileUpdateDto.UserName;
+            if (request.EmailAddress != user.Email) {
+                user.Email = request.EmailAddress;
+                user.UserName = request.EmailAddress;
+            }
+                user.PhoneNumber = request.Phone;
 
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -53,18 +54,16 @@ namespace Fakebook.Application.Account.CommandHandlers
 
                 await _context.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync();
-                result.Success = true;
                 result.Payload = userProfile;
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                _logger.LogError(ex, "Error occurred while updating user and profile for UserProfileId: {UserProfileId}", request.UserProfileId);
-                result.AddError(Generics.Enums.StatusCode.Unknown, ex.Message);
+              result.AddError(Generics.Enums.StatusCode.Unknown, ex.Message);
             }
 
             return result;
         }
-    {
+    
     }
 }

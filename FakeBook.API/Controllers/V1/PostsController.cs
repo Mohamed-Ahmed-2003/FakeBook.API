@@ -6,6 +6,7 @@ using FakeBook.API.Contracts.Posts.Requests;
 using FakeBook.API.Contracts.Posts.Responses;
 using FakeBook.API.Extensions;
 using FakeBook.API.Filters;
+using FakeBook.Domain.Aggregates.PostAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -181,7 +182,20 @@ namespace FakeBook.API.Controllers.V1
 
             return NoContent();
         }
+        [HttpGet]
+        [Route(ApiRoutes.Post.Interactions.All)]
+        [ValidateGuid("postId")]
+        public async Task<IActionResult> GetPostInteractions(string postId, CancellationToken token)
+        {
+            var postGuid = Guid.Parse(postId);
+            var query = new GetPostInteractions { PostId = postGuid };
+            var result = await _mediator.Send(query, token);
 
+            if (!result.Success) HandleErrorResponse(result.Errors);
+
+            var mapped = _mapper.Map<List<PostInteraction>>(result.Payload);
+            return Ok(mapped);
+        }
 
 
     }
