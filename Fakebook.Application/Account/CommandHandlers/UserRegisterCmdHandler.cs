@@ -29,7 +29,6 @@ namespace Fakebook.Application.Account.CommandHandlers
 
                 if (usedBefore)
                 {
-                    result.Success = false;
                     result.AddError(StatusCode.UserAlreadyExists, AccountErrorMessages.UserNameTaken);
                     return result;
                 }
@@ -47,7 +46,6 @@ namespace Fakebook.Application.Account.CommandHandlers
                 if (!res.Succeeded)
                 {
                     await transaction.RollbackAsync();
-                    result.Success = false;
                     foreach (var err in res.Errors)
                     {
                         result.AddError(StatusCode.UserCreationFailed, err.Description);

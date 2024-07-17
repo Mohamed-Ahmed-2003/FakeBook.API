@@ -16,7 +16,7 @@ namespace Fakebook.Application.Account.CommandHandlers
         {
             var result = new Response<UserProfile>();
            
-                var userProfile = await _context.userProfiles.FindAsync(request.UserProfileId);
+                var userProfile = await _context.UserProfiles.FindAsync(request.UserProfileId);
 
                 var user = userProfile != null ? await _userManager.FindByIdAsync(userProfile.IdentityId) : null;
 

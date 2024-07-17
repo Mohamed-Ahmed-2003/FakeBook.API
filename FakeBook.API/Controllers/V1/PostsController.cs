@@ -193,10 +193,34 @@ namespace FakeBook.API.Controllers.V1
 
             if (!result.Success) HandleErrorResponse(result.Errors);
 
-            var mapped = _mapper.Map<List<PostInteraction>>(result.Payload);
+            var mapped = _mapper.Map<List<AbstractPostInteraction>>(result.Payload);
             return Ok(mapped);
         }
 
+               
+        [HttpPost]
+        [Route(ApiRoutes.Post.Interactions.All)]
+        [ValidateGuid("postId")]
+        [ValidateModel]
+        public async Task<IActionResult> AddPostInteraction(string postId, PostInteractionCreate interaction,
+         CancellationToken token)
+        {
+            var postGuid = Guid.Parse(postId);
+            var userProfileId = HttpContext.GetUserProfileId();
+            var command = new AddInteractionCmd
+            {
+                PostId = postGuid,
+                UserProfileId = userProfileId,
+                Type = interaction.Type
+            };
 
+            var result = await _mediator.Send(command, token);
+
+            if (!result.Success) HandleErrorResponse(result.Errors);
+
+            var mapped = _mapper.Map<PostInteraction>(result.Payload);
+
+            return Ok(mapped);
+        }
     }
 }

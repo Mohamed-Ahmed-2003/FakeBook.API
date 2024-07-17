@@ -4,7 +4,6 @@ using Fakebook.DAL;
 using FakeBook.Domain.Aggregates.UserProfileAggregate;
 using FakeBook.Domain.ValidationExceptions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace Fakebook.Application.Profile.CommandHandlers
@@ -25,7 +24,6 @@ namespace Fakebook.Application.Profile.CommandHandlers
 
                     if (existed is null)
                     {
-                        response.Success = false;
                         response.Errors.Add(new ErrorResult { Status = Generics.Enums.StatusCode.NotFound, Message = "UserProfile is not exist" });
                         return response;
                     }
@@ -56,7 +54,6 @@ namespace Fakebook.Application.Profile.CommandHandlers
                 }
             } catch (ProfileNotValidException ex)
             {
-                response.Success = false;
                 ex.ValidationErrors.ForEach(error =>
                 {
                     response.Errors
@@ -67,7 +64,6 @@ namespace Fakebook.Application.Profile.CommandHandlers
             }
             catch (Exception ex)
             {
-                response.Success = false;
                 response.Errors.Add(new ErrorResult { Status = Generics.Enums.StatusCode.Unknown, Message = ex.Message });
             }
             return response;

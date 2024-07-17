@@ -1,11 +1,7 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
-using Fakebook.Application.Generics;
-using Fakebook.Application.Profile.Commands;
 using Fakebook.Application.Profile.Queries;
-using FakeBook.API.Contracts.Others;
 using FakeBook.API.Contracts.UserProfile.Responses;
-using FakeBook.API.Filters;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

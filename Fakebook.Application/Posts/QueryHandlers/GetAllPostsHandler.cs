@@ -22,7 +22,6 @@ namespace Fakebook.Application.Posts.QueryHandlers
             }
             catch (Exception ex)
             {
-                result.Success = false;
                 var err = new ErrorResult { Status = Generics.Enums.StatusCode.Unknown, Message = ex.Message };
                 result.Errors.Add(err);
             }

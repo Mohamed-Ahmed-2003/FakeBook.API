@@ -17,6 +17,7 @@
         PostRemovalNotAuthorized = 602 , 
         CommentUpdateNotAuthorized = 603 ,
         CommentRemovalNotAuthorized = 604 ,
+        InteractionRemovalNotAuthorized = 605 ,
 
         Unknown = 999,
     }

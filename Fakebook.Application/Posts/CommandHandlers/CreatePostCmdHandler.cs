@@ -28,7 +28,6 @@ namespace Fakebook.Application.Posts.CommandHandlers
             }
             catch (PostNotValidException ex)
             {
-                result.Success = false;
                 ex.ValidationErrors.ForEach(error =>
                 {
                     result.AddError(Generics.Enums.StatusCode.ValidationError, error);
@@ -36,7 +35,6 @@ namespace Fakebook.Application.Posts.CommandHandlers
             }
             catch (Exception ex)
             {
-                result.Success = false;
                 result.AddError(Generics.Enums.StatusCode.Unknown, ex.Message);
             }
             return result;

@@ -26,7 +26,6 @@ namespace Fakebook.Application.Account.CommandHandlers
 
             if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
             {
-                result.Success = false;
                 result.AddError(Generics.Enums.StatusCode.UserNotFound, AccountErrorMessages.WrongCredentials);
                 return result;
             }
@@ -34,7 +33,6 @@ namespace Fakebook.Application.Account.CommandHandlers
             var profile = await _context.Set<UserProfile>().FirstOrDefaultAsync(u => u.IdentityId == user.Id);
             if (profile is null)
             {
-                result.Success = false;
                 result.AddError(Generics.Enums.StatusCode.ProfileNotFound, AccountErrorMessages.AccountNotFound);
                 return result;
             }
