@@ -25,7 +25,7 @@ public class GetCurrentUserHandler(DataContext ctx, UserManager<IdentityUser> us
 
         if (profile is null)
         {
-            result.AddError(Generics.Enums.StatusCode.ProfileNotFound, AccountErrorMessages.AccountNotFound);
+            result.AddError(Generics.Enums.StatusCode.NotFound, AccountErrorMessages.AccountNotFound);
             return result;
         }
         var identity = await _userManager.FindByIdAsync(profile.IdentityId);

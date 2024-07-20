@@ -35,7 +35,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
 
                 if (usedBefore)
                 {
-                    result.AddError(StatusCode.UserAlreadyExists, AccountErrorMessages.UserNameTaken);
+                    result.AddError(StatusCode.IdentityUserAlreadyExists, AccountErrorMessages.UserNameTaken);
                     return result;
                 }
 
@@ -54,7 +54,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
                     await transaction.RollbackAsync();
                     foreach (var err in res.Errors)
                     {
-                        result.AddError(StatusCode.UserCreationFailed, err.Description);
+                        result.AddError(StatusCode.IdentityCreationFailed, err.Description);
                     }
                     return result;
                 }
@@ -99,7 +99,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
             }
             catch (Exception ex)
             {
-                result.AddError(StatusCode.Unknown, ex.Message);
+                result.AddError(StatusCode.UnknownError, ex.Message);
             }
             return result;
 

@@ -36,7 +36,7 @@ public class UpdatePostCmdHandler : IRequestHandler<UpdatePostCmd, Response<Post
 
             if (post.UserProfileId != request.UserProfileId)
             {
-                result.AddError(StatusCode.PostUpdateNotAuthorized, PostsErrorMessages.PostUpdateNotPossible);
+                result.AddError(StatusCode.PostUpdateNotPossible, PostsErrorMessages.PostUpdateNotPossible);
                 return result;
             }
 
@@ -53,7 +53,7 @@ public class UpdatePostCmdHandler : IRequestHandler<UpdatePostCmd, Response<Post
         }
         catch (Exception e)
         {
-            result.AddError(StatusCode.Unknown, e.Message);
+            result.AddError(StatusCode.UnknownError, e.Message);
         }
 
         return result;

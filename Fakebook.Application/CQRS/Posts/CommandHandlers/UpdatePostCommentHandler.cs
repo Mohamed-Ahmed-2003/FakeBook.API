@@ -39,7 +39,7 @@ public class UpdatePostCommentHandler(DataContext ctx) : IRequestHandler<UpdateP
 
             if (comment.UserProfileId != request.UserProfileId)
             {
-                result.AddError(StatusCode.CommentUpdateNotAuthorized, PostsErrorMessages.CommentUpdateNotAuthorized);
+                result.AddError(StatusCode.PostUpdateNotPossible, PostsErrorMessages.CommentUpdateNotAuthorized);
                 return result;
             }
 
@@ -55,7 +55,7 @@ public class UpdatePostCommentHandler(DataContext ctx) : IRequestHandler<UpdateP
         }
         catch (Exception e)
         {
-            result.AddError(StatusCode.Unknown, e.Message);
+            result.AddError(StatusCode.UnknownError, e.Message);
         }
 
         return result;

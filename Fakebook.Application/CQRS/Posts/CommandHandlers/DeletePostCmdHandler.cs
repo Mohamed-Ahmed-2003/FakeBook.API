@@ -35,7 +35,7 @@ public class DeletePostCmdHandler : IRequestHandler<DeletePostCmd, Response<Post
 
             if (post.UserProfileId != request.UserProfileId)
             {
-                result.AddError(StatusCode.PostRemovalNotAuthorized, PostsErrorMessages.PostDeleteNotPossible);
+                result.AddError(StatusCode.PostDeleteNotPossible, PostsErrorMessages.PostDeleteNotPossible);
                 return result;
             }
 
@@ -46,7 +46,7 @@ public class DeletePostCmdHandler : IRequestHandler<DeletePostCmd, Response<Post
         }
         catch (Exception e)
         {
-            result.AddError(StatusCode.Unknown, e.Message);
+            result.AddError(StatusCode.UnknownError, e.Message);
         }
 
         return result;

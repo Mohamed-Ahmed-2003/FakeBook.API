@@ -4,7 +4,7 @@ using Fakebook.Application.Generics.Enums;
 
 namespace Fakebook.Application.Generics
 {
-    public class Response <T>  where T : class
+    public class Response <T>  
     {
         public bool Success { get; private set; } = true;
         public List<ErrorResult> Errors { get; set; } = new List<ErrorResult>();

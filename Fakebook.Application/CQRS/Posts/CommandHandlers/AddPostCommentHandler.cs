@@ -47,7 +47,7 @@ public class AddPostCommentHandler(DataContext ctx) : IRequestHandler<AddPostCom
 
         catch (Exception e)
         {
-            result.AddError(StatusCode.Unknown, e.Message);
+            result.AddError(StatusCode.UnknownError, e.Message);
         }
 
         return result;

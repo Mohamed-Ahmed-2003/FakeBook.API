@@ -2,23 +2,32 @@
 {
     public enum StatusCode
     {
-        NotFound = 404 ,
-        Succeed = 200,
+        // HTTP Status Codes
+        NotFound = 404,
         ServerError = 500,
 
-        ValidationError = 444,
+        // Validation errors should be in the range 400 - 499
+        ValidationError = 400, // Generic validation error
+        FriendRequestValidationError = 401, // Specific validation error for friend requests
 
-        UserAlreadyExists  = 220,
-        UserCreationFailed = 221,
-        UserNotFound= 222,
-        ProfileNotFound = 223,
+        // Infrastructure errors should be in the range 500 - 599
+        IdentityCreationFailed = 500, // Identity-related infrastructure error
+        DatabaseOperationException = 501, // Database-related infrastructure error
 
-        PostUpdateNotAuthorized  = 601,
-        PostRemovalNotAuthorized = 602 , 
-        CommentUpdateNotAuthorized = 603 ,
-        CommentRemovalNotAuthorized = 604 ,
-        InteractionRemovalNotAuthorized = 605 ,
+        // Application errors should be in the range 600 - 699
+        PostUpdateNotPossible = 600,
+        PostDeleteNotPossible = 601,
+        InteractionRemovalNotAuthorized = 602,
+        IdentityUserAlreadyExists = 603,
+        IdentityUserDoesNotExist = 604,
+        IncorrectPassword = 605,
+        UnauthorizedAccountRemoval = 606,
+        CommentRemovalNotAuthorized = 607,
+        FriendRequestAcceptNotPossible = 608,
+        FriendRequestRejectNotPossible = 609,
 
-        Unknown = 999,
+        // General or Unknown errors
+        UnknownError = 999
     }
+
 }

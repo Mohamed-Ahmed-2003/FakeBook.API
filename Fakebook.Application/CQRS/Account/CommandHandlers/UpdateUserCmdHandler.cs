@@ -63,7 +63,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                result.AddError(Generics.Enums.StatusCode.Unknown, ex.Message);
+                result.AddError(Generics.Enums.StatusCode.UnknownError, ex.Message);
             }
 
             return result;

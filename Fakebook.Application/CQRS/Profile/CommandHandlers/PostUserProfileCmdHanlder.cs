@@ -65,7 +65,7 @@ namespace Fakebook.Application.CQRS.Profile.CommandHandlers
             }
             catch (Exception ex)
             {
-                response.Errors.Add(new ErrorResult { Status = Generics.Enums.StatusCode.Unknown, Message = ex.Message });
+                response.Errors.Add(new ErrorResult { Status = Generics.Enums.StatusCode.UnknownError, Message = ex.Message });
             }
             return response;
         }

@@ -51,7 +51,7 @@ public class AddInteractionCmdHandler : IRequestHandler<AddInteractionCmd, Respo
         }
         catch (Exception e)
         {
-            result.AddError(StatusCode.Unknown, e.Message);
+            result.AddError(StatusCode.UnknownError, e.Message);
         }
 
         return result;

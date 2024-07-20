@@ -30,14 +30,14 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
 
             if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
             {
-                result.AddError(Generics.Enums.StatusCode.UserNotFound, AccountErrorMessages.WrongCredentials);
+                result.AddError(Generics.Enums.StatusCode.NotFound, AccountErrorMessages.WrongCredentials);
                 return result;
             }
 
             var profile = await _context.Set<UserProfile>().FirstOrDefaultAsync(u => u.IdentityId == user.Id);
             if (profile is null)
             {
-                result.AddError(Generics.Enums.StatusCode.ProfileNotFound, AccountErrorMessages.AccountNotFound);
+                result.AddError(Generics.Enums.StatusCode.NotFound, AccountErrorMessages.AccountNotFound);
                 return result;
             }
             var mapped = _mapper.Map<IdentityUserProfileDto>(profile);

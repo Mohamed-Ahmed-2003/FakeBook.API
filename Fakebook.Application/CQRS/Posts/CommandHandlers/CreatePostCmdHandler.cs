@@ -35,7 +35,7 @@ namespace Fakebook.Application.CQRS.Posts.CommandHandlers
             }
             catch (Exception ex)
             {
-                result.AddError(Generics.Enums.StatusCode.Unknown, ex.Message);
+                result.AddError(Generics.Enums.StatusCode.UnknownError, ex.Message);
             }
             return result;
         }

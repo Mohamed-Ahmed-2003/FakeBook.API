@@ -38,7 +38,7 @@ public class GetPostCommentsHandler : IRequestHandler<GetPostComments, Response<
         }
         catch (Exception e)
         {
-            result.AddError(StatusCode.Unknown, e.Message);
+            result.AddError(StatusCode.UnknownError, e.Message);
         }
 
         return result;

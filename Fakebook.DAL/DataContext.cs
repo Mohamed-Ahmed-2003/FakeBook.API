@@ -1,4 +1,5 @@
 ﻿using Fakebook.DAL.Configurations;
+using FakeBook.Domain.Aggregates.FriendshipAggregate;
 using FakeBook.Domain.Aggregates.PostAggregate;
 using FakeBook.Domain.Aggregates.UserProfileAggregate;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace Fakebook.DAL
 
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Post> Posts{ get; set; }
-        
+        public DbSet<FriendRequest> FriendRequests { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
     }
 }
