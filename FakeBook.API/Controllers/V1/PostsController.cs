@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
-using Fakebook.Application.Posts.Commands;
-using Fakebook.Application.Posts.Queries;
+using Fakebook.Application.CQRS.Posts.Commands;
+using Fakebook.Application.CQRS.Posts.Queries;
 using FakeBook.API.Contracts.Posts.Requests;
 using FakeBook.API.Contracts.Posts.Responses;
 using FakeBook.API.Extensions;
@@ -143,11 +143,12 @@ namespace FakeBook.API.Controllers.V1
         [ValidateGuid("postId", "commentId")]
         public async Task<IActionResult> RemoveCommentFromPost(string postId, string commentId)
         {
-            //var userProfileId = HttpContext.GetUserProfileIdClaimValue();
+            var userProfileId = HttpContext.GetUserProfileId();
             var postGuid = Guid.Parse(postId);
             var commentGuid = Guid.Parse(commentId);
             var command = new RemovePostCommentCmd
             {
+                UserProfileId = userProfileId,
                 CommentId = commentGuid,
                 PostId = postGuid
             };
@@ -220,6 +221,28 @@ namespace FakeBook.API.Controllers.V1
 
             var mapped = _mapper.Map<PostInteraction>(result.Payload);
 
+            return Ok(mapped);
+        }
+        [HttpDelete]
+        [Route(ApiRoutes.Post.Interactions.Single)]
+        [ValidateGuid("postId", "interactionId")]
+        public async Task<IActionResult> RemovePostInteraction(string postId, string interactionId,
+        CancellationToken token)
+        {
+            var postGuid = Guid.Parse(postId);
+            var interactionGuid = Guid.Parse(interactionId);
+            var userProfileGuid = HttpContext.GetUserProfileId();
+            var command = new RemovePostInteractionCmd
+            {
+                PostId = postGuid,
+                InteractionId = interactionGuid,
+                UserProfileId = userProfileGuid
+            };
+
+            var result = await _mediator.Send(command, token);
+            if (!result.Success) return HandleErrorResponse(result.Errors);
+
+            var mapped = _mapper.Map<AbstractPostInteraction>(result.Payload);
             return Ok(mapped);
         }
     }

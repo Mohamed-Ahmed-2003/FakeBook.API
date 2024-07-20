@@ -22,7 +22,8 @@ namespace FakeBook.API.Registrars
 
                 opt.ClaimsIdentity.UserIdClaimType = "IdentityId";
             }
-            ).AddEntityFrameworkStores<DataContext>();
+            ).AddEntityFrameworkStores<DataContext>()
+            .AddDefaultTokenProviders();
         }
     }
 }

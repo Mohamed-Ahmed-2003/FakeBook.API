@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
-using Fakebook.Application.Account.Commands;
+using Fakebook.Application.CQRS.Account.Commands;
+using Fakebook.Application.CQRS.Account.Dtos;
 using FakeBook.API.Contracts.Identity.Requests;
+using FakeBook.API.Contracts.Identity.Responses;
 
 namespace FakeBook.API.Mapping
 {
@@ -10,6 +12,8 @@ namespace FakeBook.API.Mapping
 
             CreateMap<UserRegister, UserRegisterCmd>();
             CreateMap<UserLogin, UserLoginCmd>();
+            CreateMap<IdentityUserProfileDto, IdentityUserProfile>();
+            CreateMap<UserUpdate, UpdateUserCmd>();
 
         }
     }

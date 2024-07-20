@@ -28,6 +28,13 @@
         {
             public const string Login = "login";
             public const string Register = "register";
+            public const string CurrentUser = "currentUser";
+            public const string ChangePassword = "changePassword";
+            public const string ForgotPassword = "forgotPassword";
+            public const string ConfirmEmail = "confirmEmail";
+            public const string ConfirmPhone = "confirmPhone";
+            public const string ResetPassword = "resetPassword";
+
         }
 
     }

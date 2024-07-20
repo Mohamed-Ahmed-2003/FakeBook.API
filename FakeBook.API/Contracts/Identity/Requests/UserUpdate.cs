@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FakeBook.API.Filters;
+using System.ComponentModel.DataAnnotations;
 
 namespace FakeBook.API.Contracts.Identity.Requests
 {
@@ -15,7 +16,7 @@ namespace FakeBook.API.Contracts.Identity.Requests
         [Required]
         public required string EmailAddress { get; set; }
 
-        [Required]
+        [DateOfBirthRange(18, 100)]
         public DateTime DateOfBirth { get; set; }
         [Phone]
         public string? Phone { get; set; }

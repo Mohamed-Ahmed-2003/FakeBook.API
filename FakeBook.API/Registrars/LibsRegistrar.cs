@@ -1,6 +1,5 @@
 ﻿
-using Fakebook.Application.Profile.Queries;
-
+using Fakebook.Application.CQRS.Profile.Queries;
 
 namespace FakeBook.API.Registrars
 {

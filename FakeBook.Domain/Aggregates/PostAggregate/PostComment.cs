@@ -2,7 +2,6 @@
 using FakeBook.Domain.Constants;
 using FakeBook.Domain.ValidationExceptions;
 using FakeBook.Domain.Validators.PostValidators;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace FakeBook.Domain.Aggregates.PostAggregate
 {

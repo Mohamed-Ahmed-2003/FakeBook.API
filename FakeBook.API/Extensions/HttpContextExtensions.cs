@@ -4,12 +4,27 @@ namespace FakeBook.API.Extensions
 {
     public static class HttpContextExtensions
     {
-        public static Guid GetUserProfileId(this HttpContext context)
+        public static Guid GetClaimAsGuid(this HttpContext context, string claimType)
         {
             var userIdentity = context.User.Identity as ClaimsIdentity;
-            var profileId = userIdentity?.FindFirst("ProfileId")?.Value;
+            var claimValue = userIdentity?.FindFirst(claimType)?.Value;
 
-            return Guid.Parse(profileId);
+            if (Guid.TryParse(claimValue, out var result))
+            {
+                return result;
+            }
+
+            throw new InvalidOperationException($"Claim '{claimType}' is missing or invalid.");
+        }
+
+        public static Guid GetUserProfileId(this HttpContext context)
+        {
+            return context.GetClaimAsGuid("ProfileId");
+        }
+
+        public static Guid GetIdentityUserId(this HttpContext context)
+        {
+            return context.GetClaimAsGuid("UserId");
         }
     }
 }

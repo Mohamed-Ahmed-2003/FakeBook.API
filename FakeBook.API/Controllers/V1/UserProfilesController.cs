@@ -1,6 +1,6 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
-using Fakebook.Application.Profile.Queries;
+using Fakebook.Application.CQRS.Profile.Queries;
 using FakeBook.API.Contracts.UserProfile.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
