@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace FakeBook.Domain.Aggregates.UserProfileAggregate
 {
@@ -15,6 +11,9 @@ namespace FakeBook.Domain.Aggregates.UserProfileAggregate
         public GeneralInfo GeneralInfo { get; private set; }
         public DateTime DateCreated { get; private set; }
         public DateTime LastModified { get; private set; }
+        public DateTime LastActive { get; private set; }
+        public string ConnectionId { get; private set; }
+        
 
         public static UserProfile CreateUserProfile(string identityId, GeneralInfo generalInfo)
         {
@@ -32,6 +31,19 @@ namespace FakeBook.Domain.Aggregates.UserProfileAggregate
         {
             GeneralInfo = newInfo;
             LastModified = DateTime.UtcNow;
+        }
+        public void Online (string connId)
+        {
+            ConnectionId = connId;
+        }
+        public void Offline ()
+        {
+            ConnectionId = string.Empty;
+            LastActive = DateTime.UtcNow;
+        }
+        public string GetFullName ()
+        {
+            return GeneralInfo.FirstName + " "+GeneralInfo.LastName;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using Fakebook.Application.Services;
 using FakeBook.API.Filters;
 
@@ -14,7 +13,7 @@ namespace FakeBook.API.Registrars
             {
                 config.Filters.Add(typeof(ExceptionHandler));
             });
-
+            builder.Services.AddCors();
             builder.Services.AddApiVersioning(conf =>
             {
                 conf.DefaultApiVersion = new ApiVersion(1, 0);

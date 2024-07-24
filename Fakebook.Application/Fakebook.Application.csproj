@@ -16,4 +16,8 @@
     <ProjectReference Include="..\FakeBook.Domain\FakeBook.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CQRS\Chat\Dtos\" />
+  </ItemGroup>
+
 </Project>

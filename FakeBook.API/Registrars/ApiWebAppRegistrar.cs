@@ -1,5 +1,7 @@
 ﻿
 using Asp.Versioning.ApiExplorer;
+using FakeBook.API.RealTime;
+using FakeBook.API.RealTime.FakeBook.API.RealTime;
 
 namespace FakeBook.API.Registrars
 {
@@ -25,9 +27,18 @@ namespace FakeBook.API.Registrars
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
+            app.UseCors(c =>
+            {
+                c.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin();
+            });
             app.UseAuthorization();
 
             app.MapControllers();
+            app.MapHub<ChatHub>("/chatHub"); 
+            app.MapHub<OnlineHub>("/onlineHub"); 
+
         }
     }
 }

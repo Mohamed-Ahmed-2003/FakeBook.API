@@ -40,7 +40,7 @@ public class FriendsController(IMapper mapper, IMediator mediator) : BaseControl
     [ValidateGuid("friendRequestId")]
     public async Task<IActionResult> AcceptFriendRequest(Guid friendRequestId, CancellationToken token)
     {
-        var actionPerformedBy = HttpContext.GetUserProfileId();
+        var actionPerformedBy = HttpContext.User.GetUserProfileId();
         var command = new AcceptFriendCmd
         {
             FriendRequestId = friendRequestId,
@@ -56,7 +56,7 @@ public class FriendsController(IMapper mapper, IMediator mediator) : BaseControl
     [ValidateGuid("friendRequestId")]
     public async Task<IActionResult> RejectFriendRequest(Guid friendRequestId, CancellationToken token)
     {
-        var actionPerformedBy = HttpContext.GetUserProfileId();
+        var actionPerformedBy = HttpContext.User.GetUserProfileId();
         var command = new RejectFriendCmd
         {
             FriendRequestId = friendRequestId,
@@ -71,7 +71,7 @@ public class FriendsController(IMapper mapper, IMediator mediator) : BaseControl
     [Route(ApiRoutes.Friendships.GetFriendRequests)]
     public async Task<IActionResult> GetFriendRequests(CancellationToken token)
     {
-        var userId = HttpContext.GetUserProfileId();
+        var userId = HttpContext.User.GetUserProfileId();
         var query = new GetFriendRequests
         {
             UserId = userId
@@ -85,7 +85,7 @@ public class FriendsController(IMapper mapper, IMediator mediator) : BaseControl
     [Route(ApiRoutes.Friendships.ListFriends)]
     public async Task<IActionResult> ListFriends(CancellationToken token)
     {
-        var userId = HttpContext.GetUserProfileId();
+        var userId = HttpContext.User.GetUserProfileId();
         var query = new GetFriends
         {
             UserId = userId
@@ -100,7 +100,7 @@ public class FriendsController(IMapper mapper, IMediator mediator) : BaseControl
     [ValidateGuid("friendId")]
     public async Task<IActionResult> RemoveFriend(Guid friendId, CancellationToken token)
     {
-        var userId = HttpContext.GetUserProfileId();
+        var userId = HttpContext.User.GetUserProfileId();
         var command = new RemoveFriendCmd
         {
             UserId = userId,
@@ -131,7 +131,7 @@ public class FriendsController(IMapper mapper, IMediator mediator) : BaseControl
     {
         var query = new SearchFriends
         {
-            UserProfileId = HttpContext.GetUserProfileId(),
+            UserProfileId = HttpContext.User.GetUserProfileId(),
             SearchTerm = searchTerm
         };
         var result = await _mediator.Send(query, token);

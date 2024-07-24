@@ -3,7 +3,6 @@ using AutoMapper;
 using Fakebook.Application.CQRS.Profile.Queries;
 using FakeBook.API.Contracts.UserProfile.Responses;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FakeBook.API.Controllers.V1
@@ -11,7 +10,7 @@ namespace FakeBook.API.Controllers.V1
 
     [ApiVersion("1.0")]
     [Route(ApiRoutes.BaseRoute)]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class UserProfilesController(IMapper mapper,IMediator mediator) : BaseController
     {

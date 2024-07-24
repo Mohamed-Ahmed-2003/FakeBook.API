@@ -9,13 +9,15 @@ namespace FakeBook.Domain.Aggregates.ChatRoomAggregate
         public Guid Id { get; private set; }
         public Guid ChatRoomId { get; private set; }
         public Guid UserProfileId { get; private set; }
+        public string SenderName {  get; private set; }
         public string Content { get; private set; }
         public DateTime SentAt { get; private set; }
         public DateTime LastEdited { get; private set; }
+        public bool IsRead { get; set; }
 
         private ChatMessage() { }
 
-        public static ChatMessage CreateMessage(Guid chatRoomId, Guid userProfileId, string content)
+        public static ChatMessage CreateMessage(Guid chatRoomId, Guid userProfileId ,string senderName, string content )
         {
             if (string.IsNullOrEmpty(content))
             {
@@ -29,6 +31,7 @@ namespace FakeBook.Domain.Aggregates.ChatRoomAggregate
                 Id = Guid.NewGuid(),
                 ChatRoomId = chatRoomId,
                 UserProfileId = userProfileId,
+                SenderName = senderName,
                 Content = content,
                 SentAt = dateNow,
                 LastEdited = dateNow,
@@ -45,6 +48,10 @@ namespace FakeBook.Domain.Aggregates.ChatRoomAggregate
 
             Content = newContent;
             LastEdited = DateTime.UtcNow;
+        }
+        public void Read()
+        {
+            IsRead = true;
         }
     }
 }

@@ -20,7 +20,6 @@ namespace FakeBook.Domain.Aggregates.ChatRoomAggregate
 
         #region Properties
         public Guid Id { get; private set; }
-        public string Name { get; private set; }
         public ChatRoomType RoomType { get; private set; }
         public DateTime CreatedDate { get; private set; }
         #endregion
@@ -31,13 +30,12 @@ namespace FakeBook.Domain.Aggregates.ChatRoomAggregate
         #endregion
 
         #region FM
-        public static ChatRoom CreateChatRoom(string name, ChatRoomType roomType)
+        public static ChatRoom CreateChatRoom(ChatRoomType roomType)
         {
             var validator = new ChatRoomValidator();
             var chatRoom = new ChatRoom
             {
                 Id = Guid.NewGuid(),
-                Name = name,
                 RoomType = roomType,
                 CreatedDate = DateTime.UtcNow
             };
@@ -60,6 +58,13 @@ namespace FakeBook.Domain.Aggregates.ChatRoomAggregate
         public void AddParticipant(ChatRoomParticipant participant)
         {
             _participants.Add(participant);
+        } 
+        
+        public void AddOneOnOne (Guid friendId1 , Guid friendId2)
+        {
+            AddParticipant(ChatRoomParticipant.CreateParticipant(Id, friendId1));
+            AddParticipant(ChatRoomParticipant.CreateParticipant(Id, friendId2));
+
         }
 
         public void RemoveParticipant(ChatRoomParticipant participant)

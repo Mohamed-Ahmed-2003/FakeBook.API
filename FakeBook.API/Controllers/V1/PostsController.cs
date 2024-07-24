@@ -51,7 +51,7 @@ namespace FakeBook.API.Controllers.V1
         [ValidateModel]
         public async Task<IActionResult> CreatePost ([FromBody] PostCreate postCreate)
         {
-            var userProfileId = HttpContext.GetUserProfileId();
+            var userProfileId = HttpContext.User.GetUserProfileId();;
 
             var cmd = new CreatePostCmd
             {
@@ -76,7 +76,7 @@ namespace FakeBook.API.Controllers.V1
         [ValidateModel]
         public async Task<IActionResult> UpdatePost([FromBody] PostUpdate updatedPost, string id)
         {
-            var userProfileId = HttpContext.GetUserProfileId();
+            var userProfileId = HttpContext.User.GetUserProfileId();
 
             var command = new UpdatePostCmd()
             {
@@ -120,7 +120,7 @@ namespace FakeBook.API.Controllers.V1
         [ValidateModel]
         public async Task<IActionResult> AddPostComment(string postId, [FromBody] PostCommentCreate comment)
         {
-            var userProfileId = HttpContext.GetUserProfileId();
+            var userProfileId = HttpContext.User.GetUserProfileId();
 
             var command = new AddPostCommentCmd()
             {
@@ -143,7 +143,7 @@ namespace FakeBook.API.Controllers.V1
         [ValidateGuid("postId", "commentId")]
         public async Task<IActionResult> RemoveCommentFromPost(string postId, string commentId)
         {
-            var userProfileId = HttpContext.GetUserProfileId();
+            var userProfileId = HttpContext.User.GetUserProfileId();
             var postGuid = Guid.Parse(postId);
             var commentGuid = Guid.Parse(commentId);
             var command = new RemovePostCommentCmd
@@ -207,7 +207,7 @@ namespace FakeBook.API.Controllers.V1
          CancellationToken token)
         {
             var postGuid = Guid.Parse(postId);
-            var userProfileId = HttpContext.GetUserProfileId();
+            var userProfileId = HttpContext.User.GetUserProfileId();
             var command = new AddInteractionCmd
             {
                 PostId = postGuid,
@@ -231,7 +231,7 @@ namespace FakeBook.API.Controllers.V1
         {
             var postGuid = Guid.Parse(postId);
             var interactionGuid = Guid.Parse(interactionId);
-            var userProfileGuid = HttpContext.GetUserProfileId();
+            var userProfileGuid = HttpContext.User.GetUserProfileId();
             var command = new RemovePostInteractionCmd
             {
                 PostId = postGuid,

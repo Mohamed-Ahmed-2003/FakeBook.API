@@ -57,7 +57,7 @@ namespace FakeBook.API.Controllers.V1
         [ValidateModel]
         public async Task<IActionResult> UpdateUserInfo([FromBody] UserUpdate userUpdate)
         {
-            var userProfileId = HttpContext.GetUserProfileId();
+            var userProfileId = HttpContext.User.GetUserProfileId();
 
             var cmd = _mapper.Map<UpdateUserCmd>(userUpdate);
             cmd.UserProfileId = userProfileId;
@@ -72,7 +72,7 @@ namespace FakeBook.API.Controllers.V1
         [HttpDelete]
         public async Task<IActionResult> Delete ()
         {
-            var userProfileId = HttpContext.GetUserProfileId();
+            var userProfileId = HttpContext.User.GetUserProfileId();
             var cmd = new DeleteUserCmd
             {
                 UserProfileId = userProfileId
@@ -87,7 +87,7 @@ namespace FakeBook.API.Controllers.V1
         [Route(ApiRoutes.Identity.CurrentUser)]
         public async Task<IActionResult> CurrentUser(CancellationToken token)
         {
-            var userProfileId = HttpContext.GetUserProfileId();
+            var userProfileId = HttpContext.User.GetUserProfileId();
 
             var query = new GetCurrentUser { UserProfileId = userProfileId };
             var result = await _mediator.Send(query, token);
@@ -104,7 +104,7 @@ namespace FakeBook.API.Controllers.V1
 
             var cmd = new ChangePasswordCmd
             {
-                UserId = HttpContext.GetIdentityUserId(),
+                UserId = HttpContext.User.GetIdentityUserId(),
                 CurrentPassword = request.CurrentPassword,
                 NewPassword = request.NewPassword
             };
@@ -140,7 +140,7 @@ namespace FakeBook.API.Controllers.V1
         {
             var cmd = new ConfirmEmailCmd
             {
-                UserId = HttpContext.GetIdentityUserId(),
+                UserId = HttpContext.User.GetIdentityUserId(),
                 Token = request.Token
             };
 
@@ -159,7 +159,7 @@ namespace FakeBook.API.Controllers.V1
 
             var cmd = new SendConfirmEmailCmd
             {
-                  UserId = HttpContext.GetIdentityUserId()
+                  UserId = HttpContext.User.GetIdentityUserId()
             };
 
             var res = await _mediator.Send(cmd);

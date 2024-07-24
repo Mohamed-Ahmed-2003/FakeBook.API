@@ -5,6 +5,7 @@
         public Guid Id { get; private set; }
         public Guid ChatRoomId { get; private set; }
         public Guid UserProfileId { get; private set; }
+        
 
         private ChatRoomParticipant() { }
 

@@ -7,7 +7,6 @@ namespace FakeBook.Domain.Validators.ChatValidators
     {
         public ChatRoomValidator()
         {
-            RuleFor(chatRoom => chatRoom.Name).NotEmpty().WithMessage("Chat room name cannot be empty.");
         }
     }
 }

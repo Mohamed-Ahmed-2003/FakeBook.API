@@ -16,7 +16,7 @@ namespace FakeBook.Domain.Aggregates.UserProfileAggregate
         public string City { get; private set; }
 
         public static GeneralInfo CreateBasicInfo(string firstName, string lastName, string emailAddress,
-      string phone, DateTime dateOfBirth, string city)
+      string phone, DateTime dateOfBirth, string city )
         {
             var info = new GeneralInfo
             {
@@ -25,7 +25,7 @@ namespace FakeBook.Domain.Aggregates.UserProfileAggregate
                 EmailAddress = emailAddress,
                 Phone = phone,
                 DateOfBirth = dateOfBirth,
-                City = city
+                City = city,
             };
 
             var validator = new GeneralInfoValidator();
