@@ -61,6 +61,8 @@
                 public const string SendMessage = "rooms/{roomId}/messages";
                 public const string UpdateMessage = "rooms/{roomId}/messages/{messageId}";
                 public const string DeleteMessage = "rooms/{roomId}/messages/{messageId}";
+                public const string SearchMessage = "rooms/{roomId}/messages/search";
+
             }
         }
     }

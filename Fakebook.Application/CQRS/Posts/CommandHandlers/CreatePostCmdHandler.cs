@@ -30,12 +30,12 @@ namespace Fakebook.Application.CQRS.Posts.CommandHandlers
             {
                 ex.ValidationErrors.ForEach(error =>
                 {
-                    result.AddError(Generics.Enums.StatusCode.ValidationError, error);
+                    result.AddError(Generics.Enums.StatusCodes.ValidationError, error);
                 });
             }
             catch (Exception ex)
             {
-                result.AddError(Generics.Enums.StatusCode.UnknownError, ex.Message);
+                result.AddError(Generics.Enums.StatusCodes.UnknownError, ex.Message);
             }
             return result;
         }

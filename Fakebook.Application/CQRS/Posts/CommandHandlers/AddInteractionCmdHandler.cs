@@ -29,7 +29,7 @@ public class AddInteractionCmdHandler : IRequestHandler<AddInteractionCmd, Respo
 
             if (post == null)
             {
-                result.AddError(StatusCode.NotFound, PostsErrorMessages.PostNotFound);
+                result.AddError(StatusCodes.NotFound, PostsErrorMessages.PostNotFound);
                 return result;
             }
 
@@ -51,7 +51,7 @@ public class AddInteractionCmdHandler : IRequestHandler<AddInteractionCmd, Respo
         }
         catch (Exception e)
         {
-            result.AddError(StatusCode.UnknownError, e.Message);
+            result.AddError(StatusCodes.UnknownError, e.Message);
         }
 
         return result;

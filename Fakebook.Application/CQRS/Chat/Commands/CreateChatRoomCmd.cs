@@ -37,7 +37,7 @@ public class CreateChatRoomCmdHandler(IChatNotifier chatNotifier , DataContext c
 
                 if (!isFriend)
                 {
-                    response.AddError(StatusCode.ChatRoomCreationFailed, ChatErrorMessages.UserNotFriends);
+                    response.AddError(StatusCodes.ChatRoomCreationFailed, ChatErrorMessages.UserNotFriends);
                     return response;
                 }
 
@@ -60,13 +60,13 @@ public class CreateChatRoomCmdHandler(IChatNotifier chatNotifier , DataContext c
             {
                 foreach (var err in ex.ValidationErrors)
                 {
-                    response.AddError(StatusCode.ValidationError, err);
+                    response.AddError(StatusCodes.ValidationError, err);
                 }
             }
             catch (Exception ex)
             {
                 // Handle any unexpected errors
-                response.AddError(StatusCode.UnknownError, ex.Message);
+                response.AddError(StatusCodes.UnknownError, ex.Message);
             }
 
             return response;

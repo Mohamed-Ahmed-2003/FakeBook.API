@@ -9,6 +9,5 @@
         public DateTime SentAt { get;  set; }
         public DateTime LastEdited { get;  set; }
         public bool IsRead { get; set; }
-
     }
 }

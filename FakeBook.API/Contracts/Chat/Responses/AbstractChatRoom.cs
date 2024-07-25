@@ -8,6 +8,7 @@ namespace FakeBook.API.Contracts.Chat.Responses
         public required string Name { get;  set; }
         public ChatRoomType RoomType { get; private set; }
         public List<Guid> Participants { get; set; } = new List<Guid>();
-        public AbstractChatMessage? LastMessage { get; set; }
+        public List <AbstractChatMessage>? Messages { get; set; }
+
     }
 }

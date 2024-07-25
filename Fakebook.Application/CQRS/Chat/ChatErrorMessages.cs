@@ -14,5 +14,6 @@
         public const string ChatMessageDeleteNotAllowed = "You are not allowed to delete this chat message.";
         public const string UserNotFriends = "User is not friends with the specified friend ID.";
 
+        public const string ChatMessageSearchFailed = "An error occurred while searching messages.";
     }
 }

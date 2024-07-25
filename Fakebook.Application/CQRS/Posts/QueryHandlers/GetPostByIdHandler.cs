@@ -24,7 +24,7 @@ namespace Fakebook.Application.CQRS.Posts.QueryHandlers
 
             if (post is null)
             {
-                result.AddError(StatusCode.NotFound,
+                result.AddError(StatusCodes.NotFound,
                     string.Format(PostsErrorMessages.PostNotFound, request.PostId));
                 return result;
             }

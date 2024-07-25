@@ -27,7 +27,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
 
             if (user == null)
             {
-                response.AddError(StatusCode.NotFound, string.Format(AccountErrorMessages.AccountNotFound, request.Email));
+                response.AddError(StatusCodes.NotFound, string.Format(AccountErrorMessages.AccountNotFound, request.Email));
                 return response;
             }
 
@@ -35,7 +35,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
 
             if (!result.Succeeded)
             {
-                response.AddError(StatusCode.ValidationError, AccountErrorMessages.PasswordResetFailed);
+                response.AddError(StatusCodes.ValidationError, AccountErrorMessages.PasswordResetFailed);
                 return response;
             }
 

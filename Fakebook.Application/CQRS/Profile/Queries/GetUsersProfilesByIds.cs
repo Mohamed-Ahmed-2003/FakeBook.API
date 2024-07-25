@@ -29,7 +29,7 @@ namespace Fakebook.Application.CQRS.Profile.Queries
 
             if (request.UsersIds == null || !request.UsersIds.Any())
             {
-                response.AddError(StatusCode.NotFound, AccountErrorMessages.AccountNotFound);
+                response.AddError(StatusCodes.NotFound, AccountErrorMessages.AccountNotFound);
                 return response;
             }
 
@@ -39,7 +39,7 @@ namespace Fakebook.Application.CQRS.Profile.Queries
 
             if (!profiles.Any())
             {
-                response.AddError(StatusCode.NotFound, AccountErrorMessages.AccountNotFound);
+                response.AddError(StatusCodes.NotFound, AccountErrorMessages.AccountNotFound);
             }
             else
             {

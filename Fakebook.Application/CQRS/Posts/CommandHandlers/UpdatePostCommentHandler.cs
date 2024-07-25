@@ -26,20 +26,20 @@ public class UpdatePostCommentHandler(DataContext ctx) : IRequestHandler<UpdateP
 
             if (post == null)
             {
-                result.AddError(StatusCode.NotFound, string.Format(PostsErrorMessages.PostNotFound, request.PostId));
+                result.AddError(StatusCodes.NotFound, string.Format(PostsErrorMessages.PostNotFound, request.PostId));
                 return result;
             }
 
             var comment = post.Comments.FirstOrDefault(c => c.CommentId == request.CommentId);
             if (comment == null)
             {
-                result.AddError(StatusCode.NotFound, PostsErrorMessages.PostCommentNotFound);
+                result.AddError(StatusCodes.NotFound, PostsErrorMessages.PostCommentNotFound);
                 return result;
             }
 
             if (comment.UserProfileId != request.UserProfileId)
             {
-                result.AddError(StatusCode.PostUpdateNotPossible, PostsErrorMessages.CommentUpdateNotAuthorized);
+                result.AddError(StatusCodes.PostUpdateNotPossible, PostsErrorMessages.CommentUpdateNotAuthorized);
                 return result;
             }
 
@@ -51,11 +51,11 @@ public class UpdatePostCommentHandler(DataContext ctx) : IRequestHandler<UpdateP
         }
         catch (PostCommentNotValidException e)
         {
-            e.ValidationErrors.ForEach(er => result.AddError(StatusCode.ValidationError, er));
+            e.ValidationErrors.ForEach(er => result.AddError(StatusCodes.ValidationError, er));
         }
         catch (Exception e)
         {
-            result.AddError(StatusCode.UnknownError, e.Message);
+            result.AddError(StatusCodes.UnknownError, e.Message);
         }
 
         return result;

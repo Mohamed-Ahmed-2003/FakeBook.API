@@ -25,7 +25,7 @@ public class RemoveFriendCommandHandler(DataContext ctx) : IRequestHandler<Remov
 
         if (friendship is null)
         {
-            _result.AddError(StatusCode.FriendRequestRejectNotPossible, "Friendship does not exist");
+            _result.AddError(StatusCodes.FriendRequestRejectNotPossible, "Friendship does not exist");
             return _result;
         }
 
@@ -37,7 +37,7 @@ public class RemoveFriendCommandHandler(DataContext ctx) : IRequestHandler<Remov
         }
         catch (Exception e)
         {
-            _result.AddError(StatusCode.DatabaseOperationException, e.Message);
+            _result.AddError(StatusCodes.DatabaseOperationException, e.Message);
         }
 
         return _result;

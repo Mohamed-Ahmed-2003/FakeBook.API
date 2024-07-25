@@ -32,7 +32,7 @@ public class GetFriendDetailsHandler(DataContext ctx) : IRequestHandler<GetFrien
 
         if (friend == null)
         {
-            _result.AddError(StatusCode.FriendRequestRejectNotPossible, "Friend not found");
+            _result.AddError(StatusCodes.FriendRequestRejectNotPossible, "Friend not found");
             return _result;
         }
 

@@ -29,7 +29,7 @@ namespace Fakebook.Application.CQRS.Posts.QueryHandlers
 
                 if (post is null)
                 {
-                    result.AddError(StatusCode.NotFound, PostsErrorMessages.PostNotFound);
+                    result.AddError(StatusCodes.NotFound, PostsErrorMessages.PostNotFound);
                     return result;
                 }
 
@@ -38,7 +38,7 @@ namespace Fakebook.Application.CQRS.Posts.QueryHandlers
             }
             catch (Exception e)
             {
-                result.AddError(StatusCode.UnknownError, e.Message);
+                result.AddError(StatusCodes.UnknownError, e.Message);
             }
 
             return result;

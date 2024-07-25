@@ -1,28 +1,17 @@
-﻿using Asp.Versioning;
-using AutoMapper;
-using Fakebook.Application.Generics.Interfaces;
-using FakeBook.API.Contracts.Chat.Requests;
-using FakeBook.API.Filters;
-using FakeBook.API.RealTime;
-using MediatR;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using MediatR;
+using Fakebook.Application.CQRS.Chat.Commands;
+using Asp.Versioning;
+using FakeBook.API.Filters;
+using FakeBook.API.Controllers.V1;
+using FakeBook.API.Extensions;
+using FakeBook.API.Contracts.Chat.Responses;
+using FakeBook.API.Contracts.Chat.Requests;
+using Fakebook.Application.CQRS.Chat.Queries;
 
-namespace FakeBook.API.Controllers.V1
-{
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Authorization;
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using AutoMapper;
-    using MediatR;
-    using Fakebook.Application.CQRS.Chat.Commands;
-    using Fakebook.Application.CQRS.Chat.Queries;
-    using global::FakeBook.API.Extensions;
-    using global::FakeBook.API.Contracts.Chat.Responses;
-
-    namespace FakeBook.API.Controllers
+namespace FakeBook.API.Controllers
     {
         [ApiVersion("1.0")]
         [Route(ApiRoutes.BaseRoute)]
@@ -58,18 +47,17 @@ namespace FakeBook.API.Controllers.V1
             [HttpGet(ApiRoutes.Chat.Rooms)]
             public async Task<IActionResult> GetChatRooms()
             {
-                //var userProfileId = HttpContext.User.GetUserProfileId();
-                //var query = new GetChatRoomsQuery { UserProfileId = userProfileId };
+            var userProfileId = HttpContext.User.GetUserProfileId();
+            var query = new GetChatRoomsQuery { UserProfileId = userProfileId };
 
-                //var queryResult = await _mediator.Send(query);
-                //if (!queryResult.Success)
-                //{
-                //    return HandleErrorResponse(queryResult.Errors);
-                //}
+            var queryResult = await _mediator.Send(query);
+            if (!queryResult.Success)
+            {
+                return HandleErrorResponse(queryResult.Errors);
+            }
 
-                //var chatRoomsResponse = _mapper.Map<List<AbstractChatRoom>>(queryResult.Payload);
-                //return Ok(chatRoomsResponse);
-                throw new NotImplementedException();
+            var chatRoomsResponse = _mapper.Map<List<AbstractChatRoom>>(queryResult.Payload);
+            return Ok(chatRoomsResponse);
 
             }
 
@@ -77,20 +65,17 @@ namespace FakeBook.API.Controllers.V1
             [ValidateGuid("roomId")]
             public async Task<IActionResult> GetChatMessages(Guid roomId)
             {
-                //var query = new GetChatMessages { RoomId = roomId,UserProfileId = HttpContext.User.GetUserProfileId() };
+            var query = new GetChatMessages { RoomId = roomId, UserProfileId = HttpContext.User.GetUserProfileId() };
 
-                //var queryResult = await _mediator.Send(query);
-                //if (!queryResult.Success)
-                //{
-                //    return HandleErrorResponse(queryResult.Errors);
-                //}
-
-                //var messagesResponse = _mapper.Map<List<AbstractChatMessage>>(queryResult.Payload);
-                //return Ok(messagesResponse);
-
-                throw new NotImplementedException();
-
+            var queryResult = await _mediator.Send(query);
+            if (!queryResult.Success)
+            {
+                return HandleErrorResponse(queryResult.Errors);
             }
+
+            var messagesResponse = _mapper.Map<List<AbstractChatMessage>>(queryResult.Payload);
+            return Ok(messagesResponse);
+        }
 
             [HttpPost(ApiRoutes.Chat.Messages.SendMessage)]
             [ValidateGuid("roomId")]
@@ -116,49 +101,64 @@ namespace FakeBook.API.Controllers.V1
             [ValidateGuid("roomId", "messageId")]
             public async Task<IActionResult> UpdateMessage(Guid roomId, Guid messageId, [FromBody] UpdateChatMessage request)
             {
-                //var cmd = new UpdateChatMessageCmd
-                //{
-                //    RoomId = roomId,
-                //    MessageId = messageId,
-                //    NewContent = request.NewContent,
-                //    UserProfileId = HttpContext.User.GetUserProfileId()
-                //};
+            var cmd = new UpdateChatMessageCmd
+            {
+                RoomId = roomId,
+                MessageId = messageId,
+                NewContent = request.NewContent,
+            };
 
-                //var cmdResult = await _mediator.Send(cmd);
-                //if (!cmdResult.Success)
-                //{
-                //    return HandleErrorResponse(cmdResult.Errors);
-                //}
-
-                //return NoContent();
-                throw new NotImplementedException();
+            var cmdResult = await _mediator.Send(cmd);
+            if (!cmdResult.Success)
+            {
+                return HandleErrorResponse(cmdResult.Errors);
             }
+
+            return NoContent();
+        }
 
             [HttpDelete(ApiRoutes.Chat.Messages.DeleteMessage)]
             [ValidateGuid("roomId", "messageId")]
             public async Task<IActionResult> DeleteMessage(Guid roomId, Guid messageId)
             {
-                //var cmd = new DeleteChatMessageCmd
-                //{
-                //    RoomId = roomId,
-                //    MessageId = messageId,
-                //    UserProfileId = HttpContext.User.GetUserProfileId()
-                //};
+            var cmd = new DeleteChatMessageCmd
+            {
+                RoomId = roomId,
+                MessageId = messageId,
+                UserProfileId = HttpContext.User.GetUserProfileId()
+            };
 
-                //var cmdResult = await _mediator.Send(cmd);
-                //if (!cmdResult.Success)
-                //{
-                //    return HandleErrorResponse(cmdResult.Errors);
-                //}
-
-                //return NoContent();
-                throw new NotImplementedException();
-
+            var cmdResult = await _mediator.Send(cmd);
+            if (!cmdResult.Success)
+            {
+                return HandleErrorResponse(cmdResult.Errors);
             }
+
+            return NoContent();
+            }
+
+        [HttpGet(ApiRoutes.Chat.Messages.SearchMessage)]
+        public async Task<IActionResult> SearchMessages([FromQuery] SearchMessages queryParams)
+        {
+            var query = new SearchMessagesCmd
+            {
+                SearchTerm = queryParams.SearchTerm,
+                StartDate = queryParams.StartDate,
+                EndDate = queryParams.EndDate,
+                UserProfileId = HttpContext.User.GetUserProfileId()
+            };
+
+            var queryResult = await _mediator.Send(query);
+            if (!queryResult.Success)
+            {
+                return HandleErrorResponse(queryResult.Errors);
+            }
+
+            var messagesResponse = _mapper.Map<List<AbstractChatMessage>>(queryResult.Payload);
+            return Ok(messagesResponse);
         }
+
+
     }
-
-
-
 
 }

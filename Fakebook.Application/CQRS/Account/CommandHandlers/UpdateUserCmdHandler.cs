@@ -25,7 +25,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
 
             if (userProfile is null || user is null)
             {
-                result.AddError(Generics.Enums.StatusCode.NotFound, string.Format(AccountErrorMessages.AccountNotFound, request.UserProfileId));
+                result.AddError(Generics.Enums.StatusCodes.NotFound, string.Format(AccountErrorMessages.AccountNotFound, request.UserProfileId));
                 return result;
             }
             var updatedInfo = GeneralInfo.CreateBasicInfo(request.FirstName, request.LastName,
@@ -49,7 +49,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
                 {
                     foreach (var error in identityResult.Errors)
                     {
-                        result.AddError(Generics.Enums.StatusCode.ValidationError, error.Description);
+                        result.AddError(Generics.Enums.StatusCodes.ValidationError, error.Description);
                     }
                     await transaction.RollbackAsync();
                     return result;
@@ -63,7 +63,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                result.AddError(Generics.Enums.StatusCode.UnknownError, ex.Message);
+                result.AddError(Generics.Enums.StatusCodes.UnknownError, ex.Message);
             }
 
             return result;

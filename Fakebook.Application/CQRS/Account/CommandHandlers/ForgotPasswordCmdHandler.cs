@@ -22,7 +22,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
 
             if (user is null)
             {
-                response.AddError(StatusCode.NotFound, string.Format(AccountErrorMessages.AccountNotFound, request.Email));
+                response.AddError(StatusCodes.NotFound, string.Format(AccountErrorMessages.AccountNotFound, request.Email));
                 return response;
             }
 

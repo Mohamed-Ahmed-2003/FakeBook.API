@@ -21,7 +21,7 @@ namespace Fakebook.Application.CQRS.Posts.QueryHandlers
             }
             catch (Exception ex)
             {
-                var err = new ErrorResult { Status = Generics.Enums.StatusCode.UnknownError, Message = ex.Message };
+                var err = new ErrorResult { Status = Generics.Enums.StatusCodes.UnknownError, Message = ex.Message };
                 result.Errors.Add(err);
             }
 

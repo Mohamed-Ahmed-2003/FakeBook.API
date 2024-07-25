@@ -12,7 +12,7 @@ namespace FakeBook.API.Filters
          
                 var apiError = new ErrorResponse
                 {
-                    StatusCode = (int) StatusCode.ServerError,
+                    StatusCode = (int)Fakebook.Application.Generics.Enums.StatusCodes.ServerError,
                     StatusName = "Internal Server Error",
                     Timestamp = DateTime.UtcNow,
                  

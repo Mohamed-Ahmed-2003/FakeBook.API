@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace FakeBook.API.RealTime
 {
-    public class ChatNotifier (IHubContext<ChatHub> hubContext/* , OnlineTracker tracker*/) : IChatNotifier
+    public class ChatNotifier (IHubContext<ChatHub> hubContext) : IChatNotifier
     {
         private readonly IHubContext<ChatHub> _hubContext = hubContext;
-        //private readonly OnlineTracker _tracker = tracker;
 
         public async Task NotifyChatRoomCreated(ChatRoom chatRoom )
         {
@@ -26,12 +25,21 @@ namespace FakeBook.API.RealTime
 
         }
 
+        public async Task NotifyMessageDeleted(ChatMessage chatMessage)
+        {
+            await _hubContext.Clients.Group(chatMessage.ChatRoomId.ToString()).SendAsync("MessageDeleted", chatMessage);
+        }
+
         public async Task NotifyMessageSent(ChatMessage chatMessage)
         {
          
             await _hubContext.Clients.Group(chatMessage.ChatRoomId.ToString()).SendAsync("RecieveMessage", chatMessage);
 
         }
-        
+
+        public async Task NotifyMessageUpdated(ChatMessage chatMessage)
+        {
+            await _hubContext.Clients.Group(chatMessage.ChatRoomId.ToString()).SendAsync("MessageUpdated", chatMessage);
+        }
     }
 }

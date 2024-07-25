@@ -20,7 +20,7 @@ namespace Fakebook.Application.CQRS.Profile.QueryHandlers
 
             if (profile is null)
             {
-                response.Errors.Add(new ErrorResult { Status = StatusCode.NotFound, Message = "UserProfile is not exist" });
+                response.Errors.Add(new ErrorResult { Status = StatusCodes.NotFound, Message = "UserProfile is not exist" });
                 return response;
             }
 

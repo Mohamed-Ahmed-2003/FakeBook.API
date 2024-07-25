@@ -31,20 +31,20 @@ public class RemoveCommentFromPostHandler : IRequestHandler<RemovePostCommentCmd
 
             if (post == null)
             {
-                result.AddError(StatusCode.NotFound, string.Format(PostsErrorMessages.PostNotFound, request.PostId));
+                result.AddError(StatusCodes.NotFound, string.Format(PostsErrorMessages.PostNotFound, request.PostId));
                 return result;
             }
 
             var comment = post.Comments.FirstOrDefault(c => c.CommentId == request.CommentId);
             if (comment == null)
             {
-                result.AddError(StatusCode.NotFound, PostsErrorMessages.PostCommentNotFound);
+                result.AddError(StatusCodes.NotFound, PostsErrorMessages.PostCommentNotFound);
                 return result;
             }
 
             if (comment.UserProfileId != request.UserProfileId)
             {
-                result.AddError(StatusCode.CommentRemovalNotAuthorized, PostsErrorMessages.CommentRemovalNotAuthorized);
+                result.AddError(StatusCodes.CommentRemovalNotAuthorized, PostsErrorMessages.CommentRemovalNotAuthorized);
                 return result;
             }
 
@@ -56,11 +56,11 @@ public class RemoveCommentFromPostHandler : IRequestHandler<RemovePostCommentCmd
         }
         catch (PostCommentNotValidException e)
         {
-            e.ValidationErrors.ForEach(er => result.AddError(StatusCode.ValidationError, er));
+            e.ValidationErrors.ForEach(er => result.AddError(StatusCodes.ValidationError, er));
         }
         catch (Exception e)
         {
-            result.AddError(StatusCode.UnknownError, e.Message);
+            result.AddError(StatusCodes.UnknownError, e.Message);
         }
 
         return result;

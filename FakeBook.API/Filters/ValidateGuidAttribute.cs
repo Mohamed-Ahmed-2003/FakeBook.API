@@ -25,13 +25,13 @@ namespace FakeBook.API.Filters
             {
                 var apiError = new ErrorResponse
                 {
-                    StatusCode = (int)StatusCode.NotFound,
+                    StatusCode = (int)Fakebook.Application.Generics.Enums.StatusCodes.NotFound,
                     StatusName = "Bad Request",
                     Timestamp = DateTime.UtcNow,
                     Errors = errors
                 };
 
-                context.Result = new JsonResult(apiError) { StatusCode = (int)StatusCode.NotFound };
+                context.Result = new JsonResult(apiError) { StatusCode = (int)Fakebook.Application.Generics.Enums.StatusCodes.NotFound };
             }
         }
     }

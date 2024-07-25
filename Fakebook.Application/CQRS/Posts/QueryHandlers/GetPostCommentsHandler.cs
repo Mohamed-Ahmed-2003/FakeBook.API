@@ -30,7 +30,7 @@ public class GetPostCommentsHandler : IRequestHandler<GetPostComments, Response<
 
             if (post == null)
             {
-                result.AddError(StatusCode.NotFound, string.Format(PostsErrorMessages.PostNotFound, request.PostId));
+                result.AddError(StatusCodes.NotFound, string.Format(PostsErrorMessages.PostNotFound, request.PostId));
                 return result;
             }
 
@@ -38,7 +38,7 @@ public class GetPostCommentsHandler : IRequestHandler<GetPostComments, Response<
         }
         catch (Exception e)
         {
-            result.AddError(StatusCode.UnknownError, e.Message);
+            result.AddError(StatusCodes.UnknownError, e.Message);
         }
 
         return result;

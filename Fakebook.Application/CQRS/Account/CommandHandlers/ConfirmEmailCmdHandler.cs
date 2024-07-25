@@ -17,7 +17,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
 
             if (user is null)
             {
-                response.AddError(StatusCode.NotFound, AccountErrorMessages.AccountNotFound);
+                response.AddError(StatusCodes.NotFound, AccountErrorMessages.AccountNotFound);
                 return response;
             }
 
@@ -27,7 +27,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
             {
                 foreach (var error in result.Errors)
                 {
-                    response.AddError(StatusCode.ValidationError, error.Description);
+                    response.AddError(StatusCodes.ValidationError, error.Description);
                 }
                 return response;
             }

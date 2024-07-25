@@ -24,7 +24,7 @@ namespace Fakebook.Application.CQRS.Profile.CommandHandlers
 
                     if (existed is null)
                     {
-                        response.Errors.Add(new ErrorResult { Status = Generics.Enums.StatusCode.NotFound, Message = "UserProfile is not exist" });
+                        response.Errors.Add(new ErrorResult { Status = Generics.Enums.StatusCodes.NotFound, Message = "UserProfile is not exist" });
                         return response;
                     }
                 }
@@ -58,14 +58,14 @@ namespace Fakebook.Application.CQRS.Profile.CommandHandlers
                 ex.ValidationErrors.ForEach(error =>
                 {
                     response.Errors
-                    .Add(new ErrorResult { Status = Generics.Enums.StatusCode.ValidationError, Message = error });
+                    .Add(new ErrorResult { Status = Generics.Enums.StatusCodes.ValidationError, Message = error });
 
                 });
 
             }
             catch (Exception ex)
             {
-                response.Errors.Add(new ErrorResult { Status = Generics.Enums.StatusCode.UnknownError, Message = ex.Message });
+                response.Errors.Add(new ErrorResult { Status = Generics.Enums.StatusCodes.UnknownError, Message = ex.Message });
             }
             return response;
         }

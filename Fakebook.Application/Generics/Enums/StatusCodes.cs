@@ -1,6 +1,6 @@
 ﻿namespace Fakebook.Application.Generics.Enums
 {
-    public enum StatusCode
+    public enum StatusCodes
     {
         // HTTP Status Codes
         NotFound = 404,

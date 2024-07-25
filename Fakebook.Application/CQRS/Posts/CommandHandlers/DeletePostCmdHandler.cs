@@ -27,7 +27,7 @@ public class DeletePostCmdHandler : IRequestHandler<DeletePostCmd, Response<Post
 
             if (post is null)
             {
-                result.AddError(StatusCode.NotFound,
+                result.AddError(StatusCodes.NotFound,
                     string.Format(PostsErrorMessages.PostNotFound, request.PostId));
 
                 return result;
@@ -35,7 +35,7 @@ public class DeletePostCmdHandler : IRequestHandler<DeletePostCmd, Response<Post
 
             if (post.UserProfileId != request.UserProfileId)
             {
-                result.AddError(StatusCode.PostDeleteNotPossible, PostsErrorMessages.PostDeleteNotPossible);
+                result.AddError(StatusCodes.PostDeleteNotPossible, PostsErrorMessages.PostDeleteNotPossible);
                 return result;
             }
 
@@ -46,7 +46,7 @@ public class DeletePostCmdHandler : IRequestHandler<DeletePostCmd, Response<Post
         }
         catch (Exception e)
         {
-            result.AddError(StatusCode.UnknownError, e.Message);
+            result.AddError(StatusCodes.UnknownError, e.Message);
         }
 
         return result;

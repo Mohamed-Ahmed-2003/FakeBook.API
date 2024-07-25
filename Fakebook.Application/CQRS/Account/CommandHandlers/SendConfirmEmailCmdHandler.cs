@@ -24,7 +24,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
 
             if (user is null)
             {
-                response.AddError(StatusCode.NotFound, AccountErrorMessages.AccountNotFound );
+                response.AddError(StatusCodes.NotFound, AccountErrorMessages.AccountNotFound );
                 return response;
             }
 
@@ -39,7 +39,7 @@ namespace Fakebook.Application.CQRS.Account.CommandHandlers
             }
             catch (Exception ex)
             {
-                response.AddError(StatusCode.ServerError, "An error occurred while sending the confirmation email. \n"+ex.Message);
+                response.AddError(StatusCodes.ServerError, "An error occurred while sending the confirmation email. \n"+ex.Message);
                 return response;
             }
 

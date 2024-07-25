@@ -29,7 +29,7 @@ public class RemovePostInteractionCmdHandler : IRequestHandler<RemovePostInterac
 
             if (post is null)
             {
-                result.AddError(StatusCode.NotFound,
+                result.AddError(StatusCodes.NotFound,
                     string.Format(PostsErrorMessages.PostNotFound, request.PostId));
                 return result;
             }
@@ -39,13 +39,13 @@ public class RemovePostInteractionCmdHandler : IRequestHandler<RemovePostInterac
 
             if (interaction == null)
             {
-                result.AddError(StatusCode.NotFound, PostsErrorMessages.PostInteractionNotFound);
+                result.AddError(StatusCodes.NotFound, PostsErrorMessages.PostInteractionNotFound);
                 return result;
             }
 
             if (interaction.UserProfileId != request.UserProfileId)
             {
-                result.AddError(StatusCode.InteractionRemovalNotAuthorized,
+                result.AddError(StatusCodes.InteractionRemovalNotAuthorized,
                     PostsErrorMessages.InteractionRemovalNotAuthorized);
                 return result;
             }
@@ -58,7 +58,7 @@ public class RemovePostInteractionCmdHandler : IRequestHandler<RemovePostInterac
         }
         catch (Exception e)
         {
-            result.AddError(StatusCode.UnknownError, e.Message);
+            result.AddError(StatusCodes.UnknownError, e.Message);
         }
 
         return result;

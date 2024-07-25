@@ -24,7 +24,7 @@ public class AddPostCommentHandler(DataContext ctx) : IRequestHandler<AddPostCom
                 cancellationToken: cancellationToken);
             if (post is null)
             {
-                result.AddError(StatusCode.NotFound,
+                result.AddError(StatusCodes.NotFound,
                     string.Format(PostsErrorMessages.PostNotFound, request.PostId));
                 return result;
             }
@@ -42,12 +42,12 @@ public class AddPostCommentHandler(DataContext ctx) : IRequestHandler<AddPostCom
 
         catch (PostCommentNotValidException e)
         {
-            e.ValidationErrors.ForEach(er => result.AddError(StatusCode.ValidationError, er));
+            e.ValidationErrors.ForEach(er => result.AddError(StatusCodes.ValidationError, er));
         }
 
         catch (Exception e)
         {
-            result.AddError(StatusCode.UnknownError, e.Message);
+            result.AddError(StatusCodes.UnknownError, e.Message);
         }
 
         return result;

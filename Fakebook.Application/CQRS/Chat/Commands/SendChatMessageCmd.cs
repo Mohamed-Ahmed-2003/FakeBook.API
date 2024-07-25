@@ -29,12 +29,12 @@ namespace Fakebook.Application.CQRS.Chat.Commands
                 .FirstOrDefaultAsync(r=>r.Id == request.RoomId, cancellationToken);
             if (existedRoom is null)
             {
-                response.AddError(StatusCode.NotFound,ChatErrorMessages.ChatRoomNotFound);
+                response.AddError(StatusCodes.NotFound,ChatErrorMessages.ChatRoomNotFound);
                 return response;
             }
             if (!existedRoom.Participants.Any(p => p.UserProfileId == request.UserProfileId))
             {
-                response.AddError(StatusCode.ChatRoomNotAccessible, ChatErrorMessages.ChatMessageSendingFailed);
+                response.AddError(StatusCodes.ChatRoomNotAccessible, ChatErrorMessages.ChatMessageSendingFailed);
                 return response;
             }
             // Implementation for sending a message
@@ -54,12 +54,12 @@ namespace Fakebook.Application.CQRS.Chat.Commands
             {
                 foreach (var err in ex.ValidationErrors)
                 {
-                    response.AddError(StatusCode.ValidationError, err);
+                    response.AddError(StatusCodes.ValidationError, err);
                 }
             }
             catch (Exception ex)
             {
-                response.AddError(StatusCode.ChatMessageSendingFailed, ChatErrorMessages.ChatMessageSendingFailed);
+                response.AddError(StatusCodes.ChatMessageSendingFailed, ChatErrorMessages.ChatMessageSendingFailed);
             }
            return response;
         }

@@ -30,7 +30,7 @@ public class RejectFriendRequestHandler : IRequestHandler<RejectFriendCmd, Respo
 
         if (friendRequest is null)
         {
-            _result.AddError(StatusCode.FriendRequestRejectNotPossible, 
+            _result.AddError(StatusCodes.FriendRequestRejectNotPossible, 
                 "Not possible to reject friend request");
             return _result;
         }
@@ -45,7 +45,7 @@ public class RejectFriendRequestHandler : IRequestHandler<RejectFriendCmd, Respo
         }
         catch (Exception e)
         {
-            _result.AddError(StatusCode.DatabaseOperationException, e.Message);
+            _result.AddError(StatusCodes.DatabaseOperationException, e.Message);
         }
 
         return _result;

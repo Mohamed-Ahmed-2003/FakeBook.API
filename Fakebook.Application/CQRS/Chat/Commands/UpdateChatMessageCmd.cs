@@ -1,10 +1,11 @@
 ﻿using Fakebook.Application.Generics;
+using Fakebook.Application.Generics.Enums;
+using Fakebook.Application.Generics.Interfaces;
+using Fakebook.DAL;
+using FakeBook.Domain.Aggregates.ChatRoomAggregate;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Fakebook.Application.CQRS.Chat.Commands
 {
@@ -14,21 +15,51 @@ namespace Fakebook.Application.CQRS.Chat.Commands
         public Guid MessageId { get; set; }
         public required string NewContent { get; set; }
     }
-    public class UpdateChatMessageCmdHandler : IRequestHandler<UpdateChatMessageCmd, Response<Unit>>
+    public class UpdateChatMessageCmdHandler(DataContext context , IChatNotifier chatNotifier) : IRequestHandler<UpdateChatMessageCmd, Response<Unit>>
     {
+        private readonly DataContext _context = context;
+        private readonly IChatNotifier _chatNotifier = chatNotifier;
+
         public async Task<Response<Unit>> Handle(UpdateChatMessageCmd request, CancellationToken cancellationToken)
         {
             var response = new Response<Unit>();
 
-            // Implementation for updating a message
+            var chatRoom = await _context.ChatRooms
+                .Include(cr => cr.Messages)
+                .FirstOrDefaultAsync(cr => cr.Id == request.RoomId, cancellationToken);
 
-            // On success
+            if (chatRoom is null)
+            {
+                response.AddError(StatusCodes.ChatRoomNotFound, string.Format(ChatErrorMessages.ChatRoomNotFound, request.RoomId));
+                return response;
+            }
 
-            // On failure
-            // response.AddError(StatusCodes.Status400BadRequest, "Error message");
+            var message = chatRoom.Messages.FirstOrDefault(m => m.Id == request.MessageId);
 
+            if (message is null)
+            {
+                response.AddError(StatusCodes.ChatMessageNotFound, string.Format(ChatErrorMessages.ChatMessageNotFound, request.MessageId));
+                return response;
+            }
+
+            message.UpdateContent(request.NewContent);
+
+            try
+            {
+                _context.Set<ChatRoom>().Update(chatRoom);
+                await _context.SaveChangesAsync(cancellationToken);
+                await _chatNotifier.NotifyMessageUpdated(message);
+            }
+            catch (Exception ex)
+            {
+                response.AddError(StatusCodes.ChatMessageUpdateFailed, ChatErrorMessages.ChatMessageUpdateFailed);
+                return response;
+            }
+
+            response.Payload = Unit.Value; // Indicate that the update was successful
             return response;
         }
     }
+
 
 }

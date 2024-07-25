@@ -19,7 +19,7 @@ namespace Fakebook.Application.CQRS.Profile.CommandHandlers
 
             if (userProfile is null)
             {
-                response.Errors.Add(new ErrorResult { Status = Generics.Enums.StatusCode.NotFound, Message = "User Profile is not exist" });
+                response.Errors.Add(new ErrorResult { Status = Generics.Enums.StatusCodes.NotFound, Message = "User Profile is not exist" });
             }
             else
             {

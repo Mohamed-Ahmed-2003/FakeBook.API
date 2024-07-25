@@ -33,7 +33,7 @@ public class AcceptFriendRequestHandler : IRequestHandler<AcceptFriendCmd, Respo
 
         if (friendRequest is null)
         {
-            _result.AddError(StatusCode.FriendRequestAcceptNotPossible, 
+            _result.AddError(StatusCodes.FriendRequestAcceptNotPossible, 
                 "Not possible to accept friend request");
             return _result;
         }
@@ -52,7 +52,7 @@ public class AcceptFriendRequestHandler : IRequestHandler<AcceptFriendCmd, Respo
         catch (Exception e)
         {
             await _ctx.Database.RollbackTransactionAsync(cancellationToken);
-            _result.AddError(StatusCode.DatabaseOperationException, e.Message);
+            _result.AddError(StatusCodes.DatabaseOperationException, e.Message);
         }
 
         return _result;

@@ -80,6 +80,7 @@ namespace FakeBook.Domain.Aggregates.ChatRoomAggregate
         public void RemoveMessage(ChatMessage message)
         {
             _messages.Remove(message);
-        }
+        } 
+              
     }
 }

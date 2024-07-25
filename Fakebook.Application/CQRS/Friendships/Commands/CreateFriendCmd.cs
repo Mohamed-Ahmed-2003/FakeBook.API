@@ -33,11 +33,11 @@ public class CreateFriendRequestHandler : IRequestHandler<CreateFriendCmd, Respo
         }
         catch (FriendRequestValidationException ex)
         {
-            _result.AddError(StatusCode.FriendRequestValidationError, ex.Message);
+            _result.AddError(StatusCodes.FriendRequestValidationError, ex.Message);
         }
         catch (Exception e)
         {
-            _result.AddError(StatusCode.DatabaseOperationException, e.Message);
+            _result.AddError(StatusCodes.DatabaseOperationException, e.Message);
         }
         
         return _result;

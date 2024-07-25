@@ -6,6 +6,8 @@ namespace Fakebook.Application.Generics.Interfaces
     {
         Task NotifyChatRoomCreated(ChatRoom chatRoom);
         Task NotifyMessageSent( ChatMessage chatMessage);
+        Task NotifyMessageDeleted (ChatMessage chatMessage);
+        Task NotifyMessageUpdated (ChatMessage chatMessage);
 
     }
 }
