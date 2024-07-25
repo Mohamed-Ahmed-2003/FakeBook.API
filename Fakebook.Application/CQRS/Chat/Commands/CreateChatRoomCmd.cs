@@ -5,6 +5,7 @@ using Fakebook.DAL;
 using FakeBook.Domain.Aggregates.ChatRoomAggregate;
 using FakeBook.Domain.ValidationExceptions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fakebook.Application.CQRS.Chat.Commands
 {
@@ -13,16 +14,23 @@ namespace Fakebook.Application.CQRS.Chat.Commands
     {
         public Guid FriendId { get; set; }
         public Guid UserProfileId { get; set; }
+        public ChatRoomType RoomType{ get; set; }
     }
 
     #endregion
 
     #region Handler
 
-public class CreateChatRoomCmdHandler(IChatNotifier chatNotifier , DataContext context) : IRequestHandler<CreateChatRoomCmd, Response<ChatRoom>>
+    public class CreateChatRoomCmdHandler : IRequestHandler<CreateChatRoomCmd, Response<ChatRoom>>
     {
-        private readonly IChatNotifier _chatNotifier = chatNotifier;
-        private readonly DataContext _context = context;
+        private readonly IChatNotifier _chatNotifier;
+        private readonly DataContext _context;
+
+        public CreateChatRoomCmdHandler(IChatNotifier chatNotifier, DataContext context)
+        {
+            _chatNotifier = chatNotifier;
+            _context = context;
+        }
 
         public async Task<Response<ChatRoom>> Handle(CreateChatRoomCmd request, CancellationToken cancellationToken)
         {
@@ -30,33 +38,54 @@ public class CreateChatRoomCmdHandler(IChatNotifier chatNotifier , DataContext c
 
             try
             {
-                // Check if the user is friends
-                bool isFriend = _context.Friendships.Any(f =>
-                    (f.FirstFriendUserProfileId == request.FriendId || f.SecondFriendUserProfileId == request.FriendId)
-                    && (f.FirstFriendUserProfileId == request.UserProfileId || f.SecondFriendUserProfileId == request.UserProfileId));
-
-                if (!isFriend)
+                // Check if the chat room already exists for OneOnOne type
+                if (request.RoomType == ChatRoomType.OneOnOne)
                 {
-                    response.AddError(StatusCodes.ChatRoomCreationFailed, ChatErrorMessages.UserNotFriends);
-                    return response;
+                    bool isFriend = await _context.Friendships
+                        .AnyAsync(f =>
+                            (f.FirstFriendUserProfileId == request.FriendId && f.SecondFriendUserProfileId == request.UserProfileId) ||
+                            (f.FirstFriendUserProfileId == request.UserProfileId && f.SecondFriendUserProfileId == request.FriendId));
+
+                    if (!isFriend)
+                    {
+                        response.AddError(StatusCodes.ChatRoomCreationFailed, ChatErrorMessages.UserNotFriends);
+                        return response;
+                    }
+
+                    bool roomExists = _context.ChatRooms
+                        .Any(cr => cr.RoomType == ChatRoomType.OneOnOne
+                            && cr.Participants.Any
+                            (p =>p.UserProfileId == request.UserProfileId ) 
+                            && 
+                            cr.Participants.Any (p =>p.UserProfileId == request.FriendId ) 
+                        );
+
+                    if (roomExists)
+                    {
+                        response.AddError(StatusCodes.ChatRoomAlreadyExists, ChatErrorMessages.ChatRoomAlreadyExists);
+                        return response;
+                    }
                 }
 
                 // Create the chat room
-                var chatRoom = ChatRoom.CreateChatRoom(ChatRoomType.OneOnOne);
-                chatRoom.AddOneOnOne(request.FriendId, request.UserProfileId);
+                var chatRoom = ChatRoom.CreateChatRoom(request.RoomType);
 
+                if (request.RoomType == ChatRoomType.OneOnOne)
+                {
+                    chatRoom.AddOneOnOne(request.FriendId, request.UserProfileId);
+                }
 
-                    // Add chat room to the context and save
-                    _context.ChatRooms.Add(chatRoom);
-                    await _context.SaveChangesAsync(cancellationToken);
-                    
-                   // Notify clients
-                    await _chatNotifier.NotifyChatRoomCreated(chatRoom);
-            
+                // Add chat room to the context and save
+                _context.ChatRooms.Add(chatRoom);
+                await _context.SaveChangesAsync(cancellationToken);
+
+                // Notify clients
+                await _chatNotifier.NotifyChatRoomCreated(chatRoom);
 
                 // Set response payload
                 response.Payload = chatRoom;
-            }catch (ChatRoomNotValidException ex)
+            }
+            catch (ChatRoomNotValidException ex)
             {
                 foreach (var err in ex.ValidationErrors)
                 {
@@ -66,13 +95,13 @@ public class CreateChatRoomCmdHandler(IChatNotifier chatNotifier , DataContext c
             catch (Exception ex)
             {
                 // Handle any unexpected errors
-                response.AddError(StatusCodes.UnknownError, ex.Message);
+                response.AddError(StatusCodes.UnknownError, "An unexpected error occurred: " + ex.Message);
             }
 
             return response;
         }
-
     }
+
 
     #endregion
 

@@ -11,7 +11,7 @@ namespace Fakebook.Application.CQRS.Chat.Queries
     {
         public Guid UserProfileId { get; set; }
     }
-    public class GetChatRoomsQueryHandler(DataContext context , IMediator mediator) : IRequestHandler<GetChatRoomsQuery, Response<List<ChatRoom>>>
+    public class GetChatRoomsQueryHandler(DataContext context ) : IRequestHandler<GetChatRoomsQuery, Response<List<ChatRoom>>>
     {
         private readonly DataContext _context = context;
 
@@ -22,10 +22,11 @@ namespace Fakebook.Application.CQRS.Chat.Queries
             try
             {
                 var chatRooms = await _context.ChatRooms
-                    .Include(cr => cr.Participants)
-                    .Include(cr => cr.Messages.First())
-                    .Where(cr => cr.Participants.Any(p => p.UserProfileId == request.UserProfileId))
-                    .ToListAsync(cancellationToken);
+                .Include(cr => cr.Participants)
+                .Include (cr =>cr.Messages)
+                .Where(cr => cr.Participants.Any(p => p.UserProfileId == request.UserProfileId))
+                .ToListAsync(cancellationToken);
+
 
                 if (chatRooms is null || !chatRooms.Any())
                 {
@@ -37,7 +38,7 @@ namespace Fakebook.Application.CQRS.Chat.Queries
             }
             catch (Exception ex)
             {
-                response.AddError(StatusCodes.DatabaseOperationException, "An error occurred while fetching chat rooms.");
+                response.AddError(StatusCodes.DatabaseOperationException, "An error occurred while fetching chat rooms.\n"+ex);
             }
 
             return response;

@@ -1,5 +1,6 @@
 
 using FakeBook.Domain.Aggregates.UserProfileAggregate;
+using System.Linq.Expressions;
 
 namespace FakeBook.Domain.Aggregates.FriendshipAggregate;
 public class Friendship
@@ -17,4 +18,10 @@ public class Friendship
     {
         FriendshipStatus = FriendshipStatus.Inactive;
     }
+    //public Expression AreFriends(Guid friend1 , Guid friend2)
+    //{
+    //    return (FirstFriendUserProfileId == friend1 || SecondFriendUserProfileId == friend1  ) 
+    //        && ( FirstFriendUserProfileId == friend2|| SecondFriendUserProfileId == friend2 );
+    //}
+
 }

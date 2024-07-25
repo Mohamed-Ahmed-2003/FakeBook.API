@@ -47,7 +47,9 @@ namespace Fakebook.Application.CQRS.Chat.Commands
             await _chatNotifier.NotifyMessageSent( mesg);
 
                 existedRoom.SendMessage(mesg);
-                _context.Set<ChatRoom>().Update(existedRoom);
+
+                _context.Set<ChatMessage>().Add(mesg);
+
                 await _context.SaveChangesAsync();
             }
             catch (ChatMessageNotValidException ex)
@@ -59,7 +61,7 @@ namespace Fakebook.Application.CQRS.Chat.Commands
             }
             catch (Exception ex)
             {
-                response.AddError(StatusCodes.ChatMessageSendingFailed, ChatErrorMessages.ChatMessageSendingFailed);
+                response.AddError(StatusCodes.ChatMessageSendingFailed, ChatErrorMessages.ChatMessageSendingFailed+'\n'+ ex);
             }
            return response;
         }

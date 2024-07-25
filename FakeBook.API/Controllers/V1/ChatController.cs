@@ -10,6 +10,7 @@ using FakeBook.API.Extensions;
 using FakeBook.API.Contracts.Chat.Responses;
 using FakeBook.API.Contracts.Chat.Requests;
 using Fakebook.Application.CQRS.Chat.Queries;
+using FakeBook.Domain.Aggregates.ChatRoomAggregate;
 
 namespace FakeBook.API.Controllers
     {
@@ -31,7 +32,8 @@ namespace FakeBook.API.Controllers
                 var cmd = new CreateChatRoomCmd
                 {
                     UserProfileId = userProfileId,
-                    FriendId = friendId
+                    FriendId = friendId,
+                    RoomType = ChatRoomType.OneOnOne
                 };
 
                 var cmdResult = await _mediator.Send(cmd);
@@ -157,7 +159,6 @@ namespace FakeBook.API.Controllers
             var messagesResponse = _mapper.Map<List<AbstractChatMessage>>(queryResult.Payload);
             return Ok(messagesResponse);
         }
-
 
     }
 
