@@ -19,6 +19,8 @@
         ChatMessageSendingFailed = 503, // Failure in sending a chat message
         ChatMessageUpdateFailed = 504, // Failure in updating a chat message
         ChatMessageDeletionFailed = 505, // Failure in deleting a chat message
+        ImageUploadFailed = 506,
+        ImageDeletionFailed = 507,
 
         // Application errors should be in the range 600 - 699
         PostUpdateNotPossible = 600,

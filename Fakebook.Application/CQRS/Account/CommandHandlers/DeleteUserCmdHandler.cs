@@ -1,59 +1,86 @@
-﻿using Fakebook.Application.CQRS.Account;
-using Fakebook.Application.CQRS.Account.Commands;
+﻿using Fakebook.Application.CQRS.Account.Commands;
 using Fakebook.Application.Generics;
 using Fakebook.Application.Services;
 using Fakebook.DAL;
-using FakeBook.Domain.Aggregates.UserProfileAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace Fakebook.Application.CQRS.Account.CommandHandlers
 {
-    public class DeleteUserCmdHandler(DataContext context, UserManager<IdentityUser> userManager) : IRequestHandler<DeleteUserCmd, Response<UserProfile>>
+    public class DeleteUserCmdHandler : IRequestHandler<DeleteUserCmd, Response<Unit>>
     {
-        private readonly DataContext _context = context;
-        private readonly UserManager<IdentityUser> _userManager = userManager;
-        public async Task<Response<UserProfile>> Handle(DeleteUserCmd request, CancellationToken cancellationToken)
+        private readonly DataContext _context;
+        private readonly MediaService _mediaService;
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public DeleteUserCmdHandler(DataContext context, MediaService mediaService, UserManager<IdentityUser> userManager)
         {
-            var result = new Response<UserProfile>();
+            _context = context;
+            _mediaService = mediaService;
+            _userManager = userManager;
+        }
+
+        public async Task<Response<Unit>> Handle(DeleteUserCmd request, CancellationToken cancellationToken)
+        {
+            var response = new Response<Unit>();
 
             var userProfile = await _context.UserProfiles.FindAsync(request.UserProfileId);
 
-            var user = userProfile != null ? await _userManager.FindByIdAsync(userProfile.IdentityId) : null;
-
-            if (user is null || userProfile is null)
+            if (userProfile is null)
             {
-                result.AddError(Generics.Enums.StatusCodes.NotFound, string.Format(AccountErrorMessages.AccountNotFound, request.UserProfileId));
-                return result;
+                response.AddError(Generics.Enums.StatusCodes.NotFound, "User profile not found.");
+                return response;
             }
 
+            var user = await _userManager.FindByIdAsync(userProfile.IdentityId);
 
-            using var transaction = _context.Database.BeginTransaction();
+            if (user is null)
+            {
+                response.AddError(Generics.Enums.StatusCodes.NotFound, "User not found.");
+                return response;
+            }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                _context.Set<UserProfile>().Remove(userProfile);
+                // Delete profile picture and cover image if they exist
+                if (userProfile.ProfilePicture != null)
+                {
+                    await _mediaService.DeletePhotoAsync(userProfile.ProfilePicture.PublicId);
+                }
+
+                if (userProfile.ProfileCoverImage != null)
+                {
+                    await _mediaService.DeletePhotoAsync(userProfile.ProfileCoverImage.PublicId);
+                }
+
+                // Remove the user profile and the user from the system
+                _context.UserProfiles.Remove(userProfile);
                 var identityResult = await _userManager.DeleteAsync(user);
 
                 if (!identityResult.Succeeded)
                 {
                     foreach (var error in identityResult.Errors)
                     {
-                        result.AddError(Generics.Enums.StatusCodes.ValidationError, error.Description);
+                        response.AddError(Generics.Enums.StatusCodes.ValidationError, error.Description);
                     }
+
                     await transaction.RollbackAsync();
-                    return result;
+                    return response;
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync();
+
+                response.Payload = Unit.Value;
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                result.AddError(Generics.Enums.StatusCodes.UnknownError, ex.Message);
-
+                response.AddError(Generics.Enums.StatusCodes.UnknownError, ex.Message);
             }
-            return result;
+
+            return response;
         }
     }
 }

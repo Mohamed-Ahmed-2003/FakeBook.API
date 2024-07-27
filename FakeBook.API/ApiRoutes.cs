@@ -7,6 +7,9 @@
         public static class UserProfile
         {
             public const string RouteId = "{id}";
+            public const string SetProfilePicture = "{id}/profilePicture";
+            public const string SetProfileCoverImage = "{id}/profileCoverImage";
+            public const string Search = "search";
         }
 
         public static class Post
@@ -16,13 +19,13 @@
             public static class Comments
             {
                 public const string All = "{postId}/comments";
-                public const string Single = All + "{commentId}";
+                public const string Single = All + "/{commentId}";
             }
 
             public static class Interactions
             {
                 public const string All = "{postId}/interactions";
-                public const string Single = All + "{interactionId}";
+                public const string Single = All + "/{interactionId}";
             }
         }
 
@@ -46,7 +49,7 @@
             public const string GetFriendRequests = "friendRequests";
             public const string ListFriends = "friends";
             public const string RemoveFriend = "removeFriend";
-            public const string GetFriendDetails = "FriendDetails";
+            public const string GetFriendDetails = "friendDetails";
             public const string SearchFriends = "searchFriends";
         }
 
@@ -63,9 +66,7 @@
                 public const string DeleteMessage = "rooms/{roomId}/messages/{messageId}";
                 public const string SearchMessage = "rooms/{roomId}/messages/search";
                 public const string ReadMessage = "rooms/{roomId}/messages/{messageId}/read";
-
             }
         }
     }
-
 }

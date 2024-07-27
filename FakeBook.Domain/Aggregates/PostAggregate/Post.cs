@@ -1,4 +1,5 @@
-﻿using FakeBook.Domain.Aggregates.UserProfileAggregate;
+﻿using FakeBook.Domain.Aggregates.Shared;
+using FakeBook.Domain.Aggregates.UserProfileAggregate;
 using FakeBook.Domain.Constants;
 using FakeBook.Domain.ValidationExceptions;
 using FakeBook.Domain.Validators.PostValidators;
@@ -10,6 +11,7 @@ namespace FakeBook.Domain.Aggregates.PostAggregate
     {
         private readonly List<PostComment> _comments = new List<PostComment>();
         private readonly List<PostInteraction> _interactions = new List<PostInteraction>();
+        private readonly List<Media> _media = new List<Media>();
 
         private Post() { }
 
@@ -23,9 +25,12 @@ namespace FakeBook.Domain.Aggregates.PostAggregate
         #endregion
 
         #region Nav Props
-        public IEnumerable<PostComment> Comments { get { return _comments; } }
-        public IEnumerable<PostInteraction> Interactions { get { return _interactions; } }
+        public IEnumerable<PostComment> Comments => _comments; 
+        public IEnumerable<PostInteraction> Interactions => _interactions;
+        public IEnumerable<Media> PostMedia => _media;
+
         public UserProfile userProfile { get; private set; }
+
         #endregion
 
         #region FM
@@ -54,7 +59,7 @@ namespace FakeBook.Domain.Aggregates.PostAggregate
         }
         #endregion
 
-
+        #region methods
         public void UpdatePostText(string newText)
         {
             if (string.IsNullOrEmpty(newText))
@@ -83,5 +88,26 @@ namespace FakeBook.Domain.Aggregates.PostAggregate
         {
             _interactions.Remove(postInteraction);
         }
+
+        public void AddMedia(Media media)
+        {
+            _media.Add(media);
+            LastModifiedDate = DateTime.UtcNow;
+        }
+
+    
+
+        public void RemoveMedia(Guid mediaId)
+        {
+            var media = _media.FirstOrDefault(m => m.Id == mediaId);
+            if (media == null)
+            {
+                throw new MediaNotValidException("Media not found.");
+            }
+
+            _media.Remove(media);
+            LastModifiedDate = DateTime.UtcNow;
+        }
+        #endregion
     }
 }

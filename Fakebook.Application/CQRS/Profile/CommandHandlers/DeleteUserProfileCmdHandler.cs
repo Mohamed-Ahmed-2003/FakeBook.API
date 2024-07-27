@@ -1,5 +1,6 @@
 ﻿using Fakebook.Application.CQRS.Profile.Commands;
 using Fakebook.Application.Generics;
+using Fakebook.Application.Services;
 using Fakebook.DAL;
 using FakeBook.Domain.Aggregates.UserProfileAggregate;
 using MediatR;
@@ -7,9 +8,10 @@ using MediatR;
 
 namespace Fakebook.Application.CQRS.Profile.CommandHandlers
 {
-    public class DeleteUserProfileCmdHandler(DataContext context) : IRequestHandler<DeleteUserProfileCmd, Response<UserProfile>>
+    public class DeleteUserProfileCmdHandler(DataContext context, MediaService mediaService) : IRequestHandler<DeleteUserProfileCmd, Response<UserProfile>>
     {
         private readonly DataContext _context = context;
+        private readonly MediaService _mediaService = mediaService;
 
         public async Task<Response<UserProfile>> Handle(DeleteUserProfileCmd request, CancellationToken cancellationToken)
         {
@@ -23,6 +25,19 @@ namespace Fakebook.Application.CQRS.Profile.CommandHandlers
             }
             else
             {
+                if (userProfile.ProfilePicture != null)
+                {
+                    await _mediaService.DeletePhotoAsync(userProfile.ProfilePicture.PublicId);
+                    userProfile.RemoveProfilePicture();
+                }
+                  
+                
+                if (userProfile.ProfileCoverImage != null)
+                {
+                    await _mediaService.DeletePhotoAsync(userProfile.ProfileCoverImage.PublicId);
+                    userProfile.RemoveProfileCoverImage();
+                }
+
                 _context.Set<UserProfile>().Remove(userProfile);
                 await _context.SaveChangesAsync(cancellationToken);
             }

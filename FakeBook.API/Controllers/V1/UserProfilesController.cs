@@ -1,7 +1,9 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
+using Fakebook.Application.CQRS.Profile.Commands;
 using Fakebook.Application.CQRS.Profile.Queries;
 using FakeBook.API.Contracts.UserProfile.Responses;
+using FakeBook.API.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,16 +27,26 @@ namespace FakeBook.API.Controllers.V1
             var res =  _mapper.Map<List<UserProfileResponse>>(userProfiles.Payload);
             return Ok(res);
         }
-        //[HttpPost]
-        //[ValidateModel]
-        //public async Task<IActionResult> CreateProfile([FromBody] UserProfileCreateUpdate userProfileCreate)
-        //{
-        //    var cmd = _mapper.Map<PostUserProfileCmd>(userProfileCreate);
-        //    var userProfile = await _mediator.Send(cmd);
-        //    var res =  _mapper.Map<UserProfileResponse>(userProfile);
 
-        //    return CreatedAtAction(nameof(GetUserProfileById), new { id = res.UserProfileId }, res);
-        // }
+        [HttpGet]
+        [Route(ApiRoutes.UserProfile.Search)]
+        public async Task<IActionResult> SearchUserProfiles([FromQuery] string query)
+        {
+            var searchQuery = new SearchUserProfilesQuery
+            {
+                SearchTerm = query,
+            };
+
+            var response = await _mediator.Send(searchQuery);
+
+            if (!response.Success)
+                return HandleErrorResponse(response.Errors);
+
+            var profiles = _mapper.Map<List<UserProfileResponse>>(response.Payload);
+            return Ok(profiles);
+        }
+
+
 
         [HttpGet]
         [Route(ApiRoutes.UserProfile.RouteId)]
@@ -52,28 +64,45 @@ namespace FakeBook.API.Controllers.V1
             return Ok(profile);
         }
 
-      
+        [HttpPost]
+        [Route(ApiRoutes.UserProfile.SetProfilePicture)]
+        public async Task<IActionResult> SetProfilePicture([FromForm] IFormFile file)
+        {
+            var userProfileId = HttpContext.User.GetUserProfileId();
 
-        //[HttpPatch]
-        //[ValidateModel]
+            var command = new SetProfilePictureCmd
+            {
+                UserProfileId = userProfileId,
+                FormFile = file
+            };
 
-        //[Route(ApiRoutes.UserProfile.RouteId)]
-        //public async Task<IActionResult> UpdateUserProfile(string id, UserProfileCreateUpdate userProfile)
-        //{
-            
+            var response = await _mediator.Send(command);
 
-        //    var cmd = _mapper.Map<PostUserProfileCmd>(userProfile);
-        //    cmd.UserProfileId = Guid.Parse(id);
+            if (!response.Success)
+                return HandleErrorResponse(response.Errors);
 
-        //    var res = await _mediator.Send(cmd);
+            return Ok();
+        }
 
-        //    if (!res.Success)
-        //        return HandleErrorResponse(res.Errors);
+        [HttpPost]
+        [Route(ApiRoutes.UserProfile.SetProfileCoverImage)]
+        public async Task<IActionResult> SetProfileCoverImage([FromForm] IFormFile file)
+        {
+            var userProfileId = HttpContext.User.GetUserProfileId();
 
-        //    var profile = _mapper.Map<UserProfileResponse>(res.Payload);
-        //    return Ok(profile);
-        //}
+            var command = new SetProfileCoverImageCmd
+            {
+                UserProfileId = userProfileId,
+                FormFile = file
+            };
 
+            var response = await _mediator.Send(command);
+
+            if (!response.Success)
+                return HandleErrorResponse(response.Errors);
+
+            return Ok();
+        }
 
 
     }
