@@ -4,6 +4,7 @@ using Fakebook.Application.CQRS.Profile.Commands;
 using Fakebook.Application.CQRS.Profile.Queries;
 using FakeBook.API.Contracts.UserProfile.Responses;
 using FakeBook.API.Extensions;
+using FakeBook.API.Filters;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -66,6 +67,8 @@ namespace FakeBook.API.Controllers.V1
 
         [HttpPost]
         [Route(ApiRoutes.UserProfile.SetProfilePicture)]
+        [FileUploadValidation]
+
         public async Task<IActionResult> SetProfilePicture([FromForm] IFormFile file)
         {
             var userProfileId = HttpContext.User.GetUserProfileId();
@@ -86,6 +89,7 @@ namespace FakeBook.API.Controllers.V1
 
         [HttpPost]
         [Route(ApiRoutes.UserProfile.SetProfileCoverImage)]
+        [FileUploadValidation]
         public async Task<IActionResult> SetProfileCoverImage([FromForm] IFormFile file)
         {
             var userProfileId = HttpContext.User.GetUserProfileId();

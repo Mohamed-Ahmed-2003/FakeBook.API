@@ -1,4 +1,5 @@
-﻿using FakeBook.Domain.Aggregates.UserProfileAggregate;
+﻿using FakeBook.Domain.Aggregates.Shared;
+using FakeBook.Domain.Aggregates.UserProfileAggregate;
 
 namespace FakeBook.API.Contracts.UserProfile.Responses
 {
@@ -8,5 +9,8 @@ namespace FakeBook.API.Contracts.UserProfile.Responses
         public GeneralInfoResponse GeneralInfo { get;  set; }
         public DateTime DateCreated { get;  set; }
         public DateTime LastModified { get;  set; }
+        public Media? ProfilePicture { get;  set; }
+        public Media? ProfileCoverImage { get;  set; }
+
     }
 }

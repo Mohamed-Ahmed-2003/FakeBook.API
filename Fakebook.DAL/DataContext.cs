@@ -15,9 +15,13 @@ namespace Fakebook.DAL
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
+            builder.ApplyConfiguration(new UserProfileConfig());
+            builder.ApplyConfiguration(new PostConfig());
             builder.ApplyConfiguration(new PostCommentConfig());
             builder.ApplyConfiguration(new PostInteractionConfig());
-            builder.ApplyConfiguration(new UserProfileConfig());
+
+            builder.Entity<Post>().Navigation(p => p.PostMedia).AutoInclude();
+
             base.OnModelCreating(builder);
         }
 

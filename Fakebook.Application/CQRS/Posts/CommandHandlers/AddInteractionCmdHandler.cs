@@ -27,7 +27,7 @@ public class AddInteractionCmdHandler : IRequestHandler<AddInteractionCmd, Respo
                 .Include(p => p.Interactions)
                 .FirstOrDefaultAsync(p => p.PostId == request.PostId, cancellationToken);
 
-            if (post == null)
+            if (post is null)
             {
                 result.AddError(StatusCodes.NotFound, PostsErrorMessages.PostNotFound);
                 return result;

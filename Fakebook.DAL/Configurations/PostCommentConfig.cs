@@ -9,10 +9,12 @@ namespace Fakebook.DAL.Configurations
         public void Configure(EntityTypeBuilder<PostComment> builder)
         {
             builder.HasKey(c => c.CommentId);
-            builder.HasOne(c => c.Post)
-                .WithMany(p=>p.Comments)
-                .HasForeignKey(p => p.PostId)
-                .OnDelete(DeleteBehavior.NoAction);
+      
+
+            builder.HasOne(pc => pc.Post) // Navigation property on PostComment
+          .WithMany(p => p.Comments) // Collection property on Post
+          .HasForeignKey(pc => pc.PostId) // Foreign key property
+          .OnDelete(DeleteBehavior.Cascade); // Configure cascade delete
         }
     }
 }

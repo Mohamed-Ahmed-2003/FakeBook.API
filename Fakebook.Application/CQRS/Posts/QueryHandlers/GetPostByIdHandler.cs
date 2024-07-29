@@ -20,6 +20,7 @@ namespace Fakebook.Application.CQRS.Posts.QueryHandlers
         {
             var result = new Response<Post>();
             var post = await _context.Posts
+                .Include(p => p.PostMedia)
                 .FirstOrDefaultAsync(p => p.PostId == request.PostId);
 
             if (post is null)

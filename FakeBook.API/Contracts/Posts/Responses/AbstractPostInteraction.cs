@@ -1,4 +1,6 @@
-﻿namespace FakeBook.API.Contracts.Posts.Responses
+﻿using FakeBook.Domain.Aggregates.Shared;
+
+namespace FakeBook.API.Contracts.Posts.Responses
 {
     public class InteractionAuthor
     {
@@ -11,5 +13,6 @@
         public Guid InteractionId { get; set; }
         public required string Type { get; set; }
         public required InteractionAuthor Author { get; set; }
+        public Media? ProfilePicture { get; private set; }
     }
 }

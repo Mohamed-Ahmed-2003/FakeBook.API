@@ -97,17 +97,19 @@ namespace FakeBook.Domain.Aggregates.PostAggregate
 
     
 
-        public void RemoveMedia(Guid mediaId)
+        public void RemoveMedia(Media media)
         {
-            var media = _media.FirstOrDefault(m => m.Id == mediaId);
-            if (media == null)
-            {
-                throw new MediaNotValidException("Media not found.");
-            }
+           
 
             _media.Remove(media);
             LastModifiedDate = DateTime.UtcNow;
+        } 
+        
+        public void RemoveAllMedia()
+        {
+           _media.Clear();
         }
+        
         #endregion
     }
 }

@@ -49,14 +49,16 @@ namespace FakeBook.API.Controllers.V1
         }
         [HttpPost]
         [ValidateModel]
-        public async Task<IActionResult> CreatePost ([FromBody] PostCreate postCreate)
+        [FileUploadValidation]
+        public async Task<IActionResult> CreatePost ([FromForm] PostCreate postCreate)
         {
             var userProfileId = HttpContext.User.GetUserProfileId();;
 
             var cmd = new CreatePostCmd
             {
                 Text = postCreate.Text,
-                UserProfileId = userProfileId
+                UserProfileId = userProfileId,
+                MediaFiles = postCreate.MediaFiles,
             };
 
             var cmdRes = await _mediator.Send(cmd);
@@ -74,7 +76,8 @@ namespace FakeBook.API.Controllers.V1
         [Route(ApiRoutes.Post.RouteId)]
         [ValidateGuid("id")]
         [ValidateModel]
-        public async Task<IActionResult> UpdatePost([FromBody] PostUpdate updatedPost, string id)
+        [FileUploadValidation]
+        public async Task<IActionResult> UpdatePost([FromForm] PostUpdate updatedPost, string id)
         {
             var userProfileId = HttpContext.User.GetUserProfileId();
 
@@ -82,7 +85,8 @@ namespace FakeBook.API.Controllers.V1
             {
                 NewText = updatedPost.Text,
                 PostId = Guid.Parse(id),
-                UserProfileId = userProfileId
+                UserProfileId = userProfileId,
+                MediaFiles = updatedPost.MediaFiles,
             };
             var result = await _mediator.Send(command);
 
@@ -94,7 +98,9 @@ namespace FakeBook.API.Controllers.V1
         [ValidateGuid("id")]
         public async Task<IActionResult> DeletePost(string id, CancellationToken cancellationToken)
         {
-            var command = new DeletePostCmd() { PostId = Guid.Parse(id)};
+            var command = new DeletePostCmd() { 
+                UserProfileId = HttpContext.User.GetUserProfileId(),
+                PostId = Guid.Parse(id)};
             var result = await _mediator.Send(command, cancellationToken);
 
             return !result.Success ? HandleErrorResponse(result.Errors) : NoContent();
@@ -217,7 +223,7 @@ namespace FakeBook.API.Controllers.V1
 
             var result = await _mediator.Send(command, token);
 
-            if (!result.Success) HandleErrorResponse(result.Errors);
+            if (!result.Success) return HandleErrorResponse(result.Errors);
 
             var mapped = _mapper.Map<PostInteraction>(result.Payload);
 

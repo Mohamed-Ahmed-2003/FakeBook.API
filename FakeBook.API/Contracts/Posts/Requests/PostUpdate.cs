@@ -7,5 +7,6 @@ namespace FakeBook.API.Contracts.Posts.Requests
         [Required]
         [Length(1,2000)]
         public required string Text { get; set; }
+        public List<IFormFile>? MediaFiles { get; set; }
     }
 }

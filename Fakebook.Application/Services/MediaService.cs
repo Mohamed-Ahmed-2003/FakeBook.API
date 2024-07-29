@@ -1,17 +1,23 @@
-﻿using CloudinaryDotNet;
+﻿using Azure.Core;
+using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Fakebook.Application.Generics.Interfaces;
 using Fakebook.Application.Options;
+using FakeBook.Domain.Aggregates.PostAggregate;
+using FakeBook.Domain.Aggregates.Shared;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace Fakebook.Application.Services
 {
-    public class MediaService : IPhotoService, IVideoService, IAudioService
+    public class MediaService : IPhotoService, IVideoService, IAudioService 
     {
         private readonly Cloudinary _cloudinary;
+        private readonly MediaSettings _mediaSettings;
 
-        public MediaService(IOptions<ColudinarySettings> config)
+        public MediaService(IOptions<ColudinarySettings> config, IOptions<MediaSettings> mediaSettings)
         {
             var account = new Account
             (
@@ -20,8 +26,9 @@ namespace Fakebook.Application.Services
                 config.Value.ApiSecret
             );
             _cloudinary = new Cloudinary(account);
+            _mediaSettings = mediaSettings.Value;
         }
-
+      
         public async Task<ImageUploadResult> AddPhotoAsync(IFormFile file)
         {
             var uploadResult = new ImageUploadResult();
@@ -48,7 +55,7 @@ namespace Fakebook.Application.Services
         public async Task<VideoUploadResult> AddVideoAsync(IFormFile file)
         {
             var uploadResult = new VideoUploadResult();
-            if (file.Length > 0)
+            if (file.Length > 0 )
             {
                 using var stream = file.OpenReadStream();
                 var uploadParams = new VideoUploadParams
@@ -70,7 +77,7 @@ namespace Fakebook.Application.Services
         public async Task<RawUploadResult> AddAudioAsync(IFormFile file)
         {
             var uploadResult = new RawUploadResult();
-            if (file.Length > 0)
+            if (file.Length > 0 )
             {
                 using var stream = file.OpenReadStream();
                 var uploadParams = new RawUploadParams
@@ -88,6 +95,30 @@ namespace Fakebook.Application.Services
             var deleteParams = new DeletionParams(publicId);
             return await _cloudinary.DestroyAsync(deleteParams);
         }
+        
+        public async Task<RawUploadResult> AddMediaAsync (IFormFile file , MediaType mediaType)
+        {
+
+                    switch (mediaType)
+                    {
+                        case MediaType.Image:
+                            return await AddPhotoAsync(file);
+                        case MediaType.Video:
+                            return await AddVideoAsync(file);
+                        case MediaType.Audio:
+                            return await AddAudioAsync(file);
+                        default:
+                           throw new Exception("Unsupported media type.");
+                   }            
+
+        }
+        public async Task<DeletionResult> DeleteMediaAsync(string publicId)
+        {
+            var deleteParams = new DeletionParams(publicId);
+            return await _cloudinary.DestroyAsync(deleteParams);
+           
+        }
+
     }
 
 }

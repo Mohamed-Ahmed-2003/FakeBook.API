@@ -9,6 +9,7 @@ namespace FakeBook.Domain.Validators.PostValidators
             RuleFor(p => p.Text)
                 .NotNull().WithMessage("Post text content can't be null")
                 .NotEmpty().WithMessage("Post text content can't be empty");
+
         }
     }
 }

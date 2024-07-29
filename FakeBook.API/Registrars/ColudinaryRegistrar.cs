@@ -1,6 +1,6 @@
 ﻿using Fakebook.Application.Options;
 using Fakebook.Application.Services;
-using FakeBook.Domain.Aggregates.Shared;
+
 
 namespace FakeBook.API.Registrars
 {
@@ -15,6 +15,9 @@ namespace FakeBook.API.Registrars
             var coludinarySection = builder.Configuration.GetSection(nameof(ColudinarySettings));
             builder.Services.Configure<ColudinarySettings>(coludinarySection);
             builder.Services.AddScoped<MediaService>();
+
+            builder.Services.Configure<MediaSettings>(builder.Configuration.GetSection("MediaSettings"));
+
         }
     }
 }

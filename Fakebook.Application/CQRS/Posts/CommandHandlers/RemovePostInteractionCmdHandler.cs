@@ -1,5 +1,4 @@
-﻿using Fakebook.Application.CQRS.Posts;
-using Fakebook.Application.CQRS.Posts.Commands;
+﻿using Fakebook.Application.CQRS.Posts.Commands;
 using Fakebook.Application.Generics;
 using Fakebook.Application.Generics.Enums;
 using Fakebook.DAL;

@@ -1,4 +1,6 @@
-﻿namespace FakeBook.API.Contracts.Posts.Responses
+﻿using FakeBook.Domain.Aggregates.Shared;
+
+namespace FakeBook.API.Contracts.Posts.Responses
 {
     public class AbstractPost
     {
@@ -8,5 +10,6 @@
         public required string Text { get;  set; }
         public DateTime CreatedDate { get;  set; }
         public DateTime LastModifiedDate { get;  set; }
+        public List<Media>? Medias { get; set; }
     }
 }
